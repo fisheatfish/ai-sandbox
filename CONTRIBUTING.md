@@ -109,20 +109,79 @@ colima restart
 
 ### Code et commits
 
-- **Messages de commit clairs** :
-  ```
-  feat: ajouter support MCP server Claude
-  fix: corriger endpoint Prometheus
-  docs: mettre à jour README observabilité
-  chore: mettre à jour Ollama vers latest
-  ```
+#### 🚫 Workflow Git : NO PUSH ON MAIN
 
-- **Format** : Utiliser le format conventionnel (feat:, fix:, docs:, chore:)
+**⚠️ Règle importante** : Ne JAMAIS pousser directement sur `main`. Toutes les modifications doivent passer par une **feature branch** et une **Pull Request**.
 
-- **Tests** :
-  - Vérifier que `docker-compose up` lance sans erreurs
-  - Tester l'accès aux CLIs : `gemini --help`, `claude-code --help`
-  - Vérifier l'observabilité (Prometheus scrape, Grafana accessible)
+#### Procédure standard
+
+**1️⃣ Créer une feature branch**
+
+Créez une branche avec un nom descriptif basé sur votre feature :
+
+```bash
+git checkout -b feature/sandbox-postgres
+```
+
+Exemples de noms :
+- `feature/add-mcp-servers` : Ajout de nouvelles fonctionnalités
+- `fix/prometheus-scrape` : Correction de bug
+- `docs/update-readme` : Documentation
+- `chore/update-dependencies` : Maintenance
+
+**2️⃣ Faire vos modifications**
+
+Modifiez les fichiers nécessaires (Dockerfile, docker-compose.yml, configs, etc.)
+
+**3️⃣ Commit avec message clair**
+
+```bash
+git add .
+git commit -m "feat: add postgres service with healthcheck"
+```
+
+Messages de commit recommandés :
+```
+feat: ajouter support MCP server Claude
+fix: corriger endpoint Prometheus
+docs: mettre à jour README observabilité
+chore: mettre à jour Ollama vers latest
+```
+
+Format : Utiliser le format conventionnel (feat:, fix:, docs:, chore:)
+
+**4️⃣ Pousser votre branche**
+
+```bash
+git push origin feature/sandbox-postgres
+```
+
+**5️⃣ Créer une Pull Request (PR)**
+
+- Allez sur GitHub
+- Créez une PR depuis votre branche vers `main`
+- Décrivez clairement vos changements
+- Référencez les issues si applicable
+- Attendez l'auto-merge après review/CI
+
+**6️⃣ Mettre à jour votre main local**
+
+Une fois votre PR mergée :
+
+```bash
+git checkout main
+git pull origin main
+```
+
+#### Checklist avant de pousser
+
+- [ ] Code testé localement avec `docker-compose up`
+- [ ] Messages de commit clairs et conventionnels
+- [ ] README mis à jour si nécessaire
+- [ ] Variables d'environnement documentées
+- [ ] Pas de secrets ou credentials dans le code
+- [ ] Images Docker utilisent des versions spécifiques
+- [ ] Pas de fichiers de workspace commitados (`.gitignore` respecté)
 
 ### Documentation
 
@@ -217,6 +276,7 @@ colima restart
   - Github Actions pour tests
   - Scan de sécurité (trivy, snyk)
   - Versioning automatique
+
 
 ## 📋 Checklist pour une PR
 
