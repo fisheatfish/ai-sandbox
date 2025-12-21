@@ -1,11 +1,11 @@
 # AI Docker Sandbox
 
-Une sandbox Docker complète pour les développeurs qui souhaitent explorer et expérimenter avec les outils IA modernes : **Gemini** et **Claude**.
+Une sandbox Docker complète pour les développeurs qui souhaitent explorer et expérimenter avec les outils IA modernes : **Gemini**, **Claude** et **Qwen**.
 
 ## 🎯 Objectif
 
 Ce repository fournit un environnement de développement isolé, pré-configuré et reproductible pour :
-- Expérimenter avec les APIs et CLIs de Google Gemini et Anthropic Claude
+- Expérimenter avec les APIs et CLIs de Google Gemini, Anthropic Claude et Alibaba Qwen
 - Développer des applications IA sans poluer votre machine locale
 - Tester des configurations complexes et des intégrations
 - Bénéficier d'une observabilité complète de vos expériences
@@ -26,6 +26,7 @@ Ce repository fournit un environnement de développement isolé, pré-configuré
 - Node.js 20
 - @google/gemini-cli (CLI Gemini)
 - @anthropic-ai/claude-code (CLI Claude)
+- @qwen-code/qwen-code (CLI Qwen)
 - Git
 - Python 3 + pip
 - curl
@@ -280,7 +281,15 @@ docker exec -it ai-sandbox bash
 claude-code --help
 # Utilisation des outils Claude
 ```
+Expérimenter avec Qwen
 
+```bash
+docker exec -it ai-sandbox bash
+qwen-code --help
+# Utilisation des outils Qwen
+```
+
+### 
 ### Monitorer vos expériences
 
 1. Activer la telemetrie dans docker-compose.yml

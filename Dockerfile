@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
 # Installation des CLIs IA
 RUN npm install -g @google/gemini-cli
 RUN npm install -g @anthropic-ai/claude-code
+RUN npm install -g @qwen-code/qwen-code@latest
 
 # Utilisateur non-root (sécurité)
 RUN useradd -m aiuser
