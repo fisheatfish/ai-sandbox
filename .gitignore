@@ -1,0 +1,85 @@
+# Dossier workspace (projets locaux et données)
+workspace/
+
+# Variables d'environnement
+.env
+.env.local
+.env.*.local
+
+# Fichiers de secrets et credentials
+*.key
+*.pem
+*.crt
+*.pfx
+
+# Docker volumes et données persistantes
+ollama/
+grafana-data/
+prometheus-data/
+
+# Logs
+*.log
+logs/
+*.out
+
+# Cache et artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+node_modules/
+dist/
+build/
+
+# IDE et éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.env.local.swp
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Système
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Historique bash/zsh
+.bash_history
+.zsh_history
+
+# Tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Python
+venv/
+env/
+.venv
+ENV/
+.venv/
+
+# OS spécifiques
+Thumbs.db
+*.egg-info/
