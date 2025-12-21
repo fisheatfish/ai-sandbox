@@ -106,6 +106,19 @@ colima status
 
 ### Lancer l'environnement
 
+#### 1️⃣ Créer le dossier workspace (première fois uniquement)
+
+Avant de lancer les services, créez un dossier `workspace` à la racine du projet. C'est là que vous mettrez tous vos projets IA :
+
+```bash
+# Depuis la racine du projet
+mkdir -p workspace
+```
+
+Ce dossier sera automatiquement monté en volume dans le conteneur `ai-sandbox` sur `/workspace`. Vous pourrez y accéder et y créer vos projets.
+
+#### 2️⃣ Lancer les services
+
 ```bash
 docker-compose up -d
 ```
