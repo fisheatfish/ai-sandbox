@@ -9,6 +9,7 @@ gemini-cli-data/
 .env.*.local
 
 # Fichiers de secrets et credentials
+secrets/
 *.key
 *.pem
 *.crt
