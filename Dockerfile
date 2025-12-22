@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 
 # Update npm to the latest version
 
-npm install -g npm@11.7.0
+RUN npm install -g npm@11.7.0
 
 # Installation des CLIs IA
 RUN npm install -g @google/gemini-cli
