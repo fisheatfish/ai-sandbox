@@ -153,7 +153,7 @@ source ~/.bashrc
 Ajoutez cette ligne à votre fichier `~/.zshrc` :
 
 ```bash
-alias ai-sandbox='cd ~/Documents/Projects/ai-docker && docker-compose up -d && docker exec -it ai-sandbox bash'
+alias ai-sandbox='cd ~/Documents/ai-docker && docker-compose up -d && docker exec -it ai-sandbox bash'
 ```
 
 Puis rechargez la configuration :
