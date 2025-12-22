@@ -47,63 +47,7 @@ Ce repository fournit un environnement de développement isolé, pré-configuré
 
 #### Option 2 : Colima (Alternative Open Source)
 
-Si vous ne pouvez pas installer Docker Desktop, **Colima** est une excellente alternative légère et open-source.
-
-**macOS - Installation via Homebrew**
-
-```bash
-# Installation
-brew install colima docker docker-compose
-
-# Démarrer Colima
-colima start
-
-# Vérifier que Docker fonctionne
-docker ps
-```
-
-**Linux - Installation (Ubuntu/Debian)**
-
-```bash
-# Installer les dépendances
-sudo apt-get update
-sudo apt-get install -y docker.io docker-compose
-
-# Pour Colima sur Linux, utiliser la version Go
-curl -LO https://github.com/abiosoft/colima/releases/latest/download/colima-Linux-x86_64
-chmod +x colima-Linux-x86_64
-sudo mv colima-Linux-x86_64 /usr/local/bin/colima
-
-# Démarrer Colima
-colima start
-```
-
-**Linux - Avec package manager (Arch Linux)**
-
-```bash
-sudo pacman -S colima docker docker-compose
-colima start
-```
-
-**Avantages de Colima**
-- ✅ Open Source et gratuit
-- ✅ Léger (utilise QEMU ou Hypervisor natif)
-- ✅ Compatible avec Docker CLI standard
-- ✅ Peu de ressources système
-- ✅ Idéal pour les développeurs sans Docker Desktop
-
-**Vérification de l'installation**
-
-```bash
-# Vérifier Docker
-docker --version
-
-# Vérifier Docker Compose
-docker-compose --version
-
-# Vérifier Colima (optionnel)
-colima status
-```
+Si vous ne pouvez pas installer Docker Desktop, **Colima** est une excellente alternative légère et open-source. Vous pouvez suivre [ce tuto](https://blog.stephane-robert.info/post/colima/)
 
 ### Lancer l'environnement
 
@@ -204,207 +148,67 @@ Et vous serez automatiquement :
 
 **💡 Astuce** : Adaptez le chemin `~/Documents/Projects/ai-docker` à votre propre chemin d'installation si différent.
 
-## 🔧 Configuration MCP (Model Context Protocol)
-
-Le Model Context Protocol (MCP) permet d'étendre les capacités de Claude avec des outils externes comme GitHub.
-
-### Configuration GitHub pour Claude
-
-**📖 Documentation officielle** : Consultez le [guide d'installation officiel](https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md) pour plus de détails, incluant la création d'un [GitHub Token](https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md#creating-a-github-token).
-
-1. **Créer le dossier de données Claude** (première fois uniquement) :
-   ```bash
-   mkdir -p claude-code-data
-   ```
-
-2. **Lancer l'environnement** :
-   ```bash
-   docker-compose up -d
-   docker exec -it ai-sandbox bash
-   ```
-
-3. **Installer le MCP GitHub** (dans le conteneur) :
-   ```bash
-   claude mcp add --transport http github \
-     "https://api.githubcopilot.com/mcp" \
-     -H "Authorization: Bearer $GITHUB_TOKEN"
-   ```
-
-
-4. **Vérification** :
-   La configuration sera automatiquement sauvegardée dans `claude-code-data/.claude.json` et persistée entre les sessions.
-
-**🔒 Sécurité** : Le dossier `claude-code-data` est automatiquement ignoré par Git pour éviter de pousser des secrets.
-
-### Configuration par projet
-
-Le MCP GitHub est configuré par défaut pour le dossier racine `/workspace`. Si vous lancez Claude depuis un autre dossier dans `workspace` (par exemple `/workspace/projects/mon-projet`), vous devez ajouter manuellement la configuration dans le fichier `.claude.json`.
-
-1. **Ouvrez le fichier** `claude-code-data/.claude.json`
-2. **Ajoutez une section** dans `"projects"` en copiant la configuration de `/workspace` et en remplaçant le chemin :
-
-   ```json
-   "/workspace/projects/mon-projet": {
-     "allowedTools": [],
-     "mcpContextUris": [],
-     "mcpServers": {
-       "github": {
-         "type": "http",
-         "url": "https://api.githubcopilot.com/mcp",
-         "headers": {
-           "Authorization": "Bearer $GITHUB_TOKEN"
-         }
-       }
-     },
-     "enabledMcpjsonServers": [],
-     "disabledMcpjsonServers": [],
-     "hasTrustDialogAccepted": false,
-     "projectOnboardingSeenCount": 0,
-     "hasClaudeMdExternalIncludesApproved": false,
-     "hasClaudeMdExternalIncludesWarningShown": false
-   }
-   ```
-
-3. **Remplacez** `$GITHUB_TOKEN` par votre token GitHub réel.
-
-**💡 Note** : Répétez cette étape pour chaque nouveau projet où vous souhaitez utiliser le MCP GitHub.
+## �️ Utilisation rapide
 
 ### Accéder aux interfaces
 
-- **Grafana** : http://localhost:3000
-- **Prometheus** : http://localhost:9090
-- **Ollama** (si utilisé) : http://localhost:11434
+- **Grafana** (dashboards) : http://localhost:3000
+- **Prometheus** (métriques) : http://localhost:9090
+- **Ollama** (LLMs locaux) : http://localhost:11434
 
-## 📊 Observabilité
-
-La stack complète d'observabilité est pré-configurée :
-
-### OpenTelemetry Collector
-- Reçoit les métriques en OTLP gRPC sur le port `4317`
-- Exporte les métriques vers Prometheus sur le port `9464`
-- Configuration : [observability/otel-collector-config.yaml](observability/otel-collector-config.yaml)
-
-### Prometheus
-- Scrape les métriques du collector tous les 15s
-- Configuration : [observability/prometheus.yml](observability/prometheus.yml)
-- Accès : http://localhost:9090
-
-### Grafana
-- Visualisation des métriques Prometheus
-- Port : 3000
-- Credentials par défaut : admin / admin (à changer en production)
-
-### Telemetrie Gemini
-
-La telemetrie Gemini est actuellement **désactivée par défaut** mais peut être activée en éditant `docker-compose.yml` :
-
-```yaml
-environment:
-  - GEMINI_TELEMETRY_ENABLED=true
-  - GEMINI_TELEMETRY_TARGET=local
-  - GEMINI_TELEMETRY_USE_COLLECTOR=true
-  - GEMINI_TELEMETRY_OTLP_ENDPOINT=http://otel-collector:4317
-```
-
-## 🔧 Architecture
-
-```mermaid
-graph TD
-    A[ai-sandbox Container<br/>Node.js + Gemini CLI + Claude CLI] --> B[OpenTelemetry Collector<br/>Port: 4317]
-    A --> C[Ollama<br/>Port: 11434]
-    A --> D[Workspace Volume<br/>/workspace]
-
-    B --> E[Prometheus<br/>Port: 9090]
-    E --> F[Grafana<br/>Port: 3000]
-
-    B --> G[Prometheus Metrics<br/>Port: 9464]
-
-    classDef container fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef service fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    classDef monitoring fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
-
-    class A container
-    class B,C,D service
-    class E,F,G monitoring
-```
-
-## 📁 Structure du projet
-
-```
-.
-├── docker-compose.yml          # Orchestration des services
-├── Dockerfile                   # Image custom ai-sandbox
-├── observability/
-│   ├── otel-collector-config.yaml
-│   └── prometheus.yml
-├── workspace/                   # Dossier partagé (vos projets IA)
-└── README.md
-```
-
-## 🛠️ Configuration
-
-### Variables d'environnement
-
-Vous pouvez configurer dans `docker-compose.yml` :
-
-- `OLLAMA_HOST` : URL du serveur Ollama
-- `GEMINI_TELEMETRY_ENABLED` : Active la telemetrie Gemini
-- `GEMINI_TELEMETRY_OTLP_ENDPOINT` : Point d'entrée OpenTelemetry
-
-### Volumes
-
-- `ollama:/root/.ollama` : Cache des modèles Ollama
-- `grafana-data:/var/lib/grafana` : Données Grafana
-- `~/Documents/Projects/ai-docker/workspace:/workspace` : Vos projets (à adapter à votre machine)
-
-## 📚 Cas d'usage
-
-### Expérimenter avec Gemini
+### Utiliser les CLIs IA
 
 ```bash
-docker exec -it ai-sandbox bash
+# Depuis le conteneur ai-sandbox
+
+# Gemini
 gemini --help
-# Authentification et utilisation
-```
 
-### Expérimenter avec Claude
-
-```bash
-docker exec -it ai-sandbox bash
+# Claude
 claude-code --help
-# Utilisation des outils Claude
-```
-Expérimenter avec Qwen
 
-```bash
-docker exec -it ai-sandbox bash
+# Qwen
 qwen-code --help
-# Utilisation des outils Qwen
 ```
 
-### 
-### Monitorer vos expériences
+## 📚 Documentation complète
 
-1. Activer la telemetrie dans docker-compose.yml
-2. Accéder à Grafana (http://localhost:3000)
-3. Configurer Prometheus comme datasource (http://otel-collector:9464)
-4. Créer des dashboards personnalisés
+| Document | Contenu |
+|----------|---------|
+| [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | Configuration MCP, architecture, configuration détaillée, troubleshooting |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Guide de contribution, workflow Git, bonnes pratiques, roadmap |
 
-## 🧪 Développement
+Pour approfondir : **Consultez le [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** qui couvre :
+- ✅ Configuration MCP pour Claude + GitHub
+- ✅ Observabilité détaillée (OpenTelemetry, Prometheus, Grafana)
+- ✅ Configuration avancée
+- ✅ Cas d'usage (Gemini, Claude, Qwen, Ollama)
+- ✅ Troubleshooting
 
-Pour contribuer à ce projet, consulte [CONTRIBUTING.md](CONTRIBUTING.md).
+## 🤝 Contribution
 
-## 📝 Notes
+Pour contribuer à ce projet, consultez [CONTRIBUTING.md](CONTRIBUTING.md) qui explique :
+- ✅ Workflow Git (feature branches, PR, etc.)
+- ✅ Bonnes pratiques
+- ✅ Roadmap future
 
-- L'image ai-sandbox utilise un utilisateur non-root (`aiuser`) pour des raisons de sécurité
-- Les CLIs sont installés globalement via npm
-- La workspace est montée en volume pour la persistance
-- Grafana utilise les credentials par défaut en dev (à sécuriser en production)
+## ❓ Questions rapides
 
-## 📄 Licence
+**Comment ajouter une clé API ?**
+Créez un fichier `.env` à la racine et chargez-le dans docker-compose.yml.
+
+**Comment persister mes données entre sessions ?**
+Le dossier `/workspace` est automatiquement monté en volume.
+
+**Comment monitorer mes expériences ?**
+Activez la télémétrie dans docker-compose.yml et utilisez Grafana.
+
+**Besoin d'aide ?** → Consultez le [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md#troubleshooting).
+
+## 📝 Licence
 
 [À définir selon vos préférences]
 
 ---
 
-**Prêt à explorer l'IA ?** 🚀 Commence par lancer `docker-compose up` !
+**Prêt ?** 🚀 Lancez `docker-compose up -d` et commencez à explorer l'IA !
