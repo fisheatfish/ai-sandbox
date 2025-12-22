@@ -236,6 +236,39 @@ Le Model Context Protocol (MCP) permet d'étendre les capacités de Claude avec 
 
 **🔒 Sécurité** : Le dossier `claude-code-data` est automatiquement ignoré par Git pour éviter de pousser des secrets.
 
+### Configuration par projet
+
+Le MCP GitHub est configuré par défaut pour le dossier racine `/workspace`. Si vous lancez Claude depuis un autre dossier dans `workspace` (par exemple `/workspace/projects/mon-projet`), vous devez ajouter manuellement la configuration dans le fichier `.claude.json`.
+
+1. **Ouvrez le fichier** `claude-code-data/.claude.json`
+2. **Ajoutez une section** dans `"projects"` en copiant la configuration de `/workspace` et en remplaçant le chemin :
+
+   ```json
+   "/workspace/projects/mon-projet": {
+     "allowedTools": [],
+     "mcpContextUris": [],
+     "mcpServers": {
+       "github": {
+         "type": "http",
+         "url": "https://api.githubcopilot.com/mcp",
+         "headers": {
+           "Authorization": "Bearer $GITHUB_TOKEN"
+         }
+       }
+     },
+     "enabledMcpjsonServers": [],
+     "disabledMcpjsonServers": [],
+     "hasTrustDialogAccepted": false,
+     "projectOnboardingSeenCount": 0,
+     "hasClaudeMdExternalIncludesApproved": false,
+     "hasClaudeMdExternalIncludesWarningShown": false
+   }
+   ```
+
+3. **Remplacez** `$GITHUB_TOKEN` par votre token GitHub réel.
+
+**💡 Note** : Répétez cette étape pour chaque nouveau projet où vous souhaitez utiliser le MCP GitHub.
+
 ### Accéder aux interfaces
 
 - **Grafana** : http://localhost:3000
