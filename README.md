@@ -51,22 +51,44 @@ Si vous ne pouvez pas installer Docker Desktop, **Colima** est une excellente al
 
 ### Lancer l'environnement
 
-#### 0️⃣ Configurer les secrets (première fois uniquement)
+#### 0️⃣ Configurer les variables d'environnement (première fois uniquement)
 
-Créez un dossier `secrets` et un fichier `.env` pour stocker vos clés API de manière sécurisée :
+Ce projet utilise des variables d'environnement pour les chemins locaux afin de s'adapter à différentes configurations. Vous devez créer un fichier `.env` à la racine du projet :
+
+**Étape 1 : Copier le fichier template**
+
+```bash
+cp .exemple.env .env
+```
+
+**Étape 2 : Éditer le fichier `.env`**
+
+Ouvrez le fichier `.env` créé et remplacez les valeurs par vos chemins absolus locaux :
+
+```dotenv
+# Chemin absolu vers le répertoire racine du projet
+AI_DOCKER_BASE=/Users/votre_username/Documents/Projects/ai-docker
+
+# Chemin absolu vers le répertoire contenant vos secrets et clés API
+AI_SECRETS_BASE=/Users/votre_username/Documents/Secrets/ai-docker
+```
+
+**🔒 Sécurité** : Le fichier `.env` est automatiquement ignoré par Git. Ne partagez jamais ce fichier qui peut contenir des informations sensibles.
+
+#### Configurer vos secrets et clés API
+
+Créez également un dossier `secrets` au chemin spécifié dans `AI_SECRETS_BASE` pour stocker vos clés API :
 
 ```bash
 # Créer le dossier secrets
-mkdir -p secrets
+mkdir -p $AI_SECRETS_BASE
 
-# Créer le fichier .env avec vos clés API
-cat > secrets/.env << EOF
+# Créer un fichier .env avec vos clés API
+cat > $AI_SECRETS_BASE/.env << EOF
 # Clés API pour les outils IA
 GITHUB_TOKEN=votre_token_github_ici
 EOF
 ```
-
-**🔒 Sécurité** : Le dossier `secrets/` est automatiquement ignoré par Git. Ne partagez jamais ce fichier.
 
 #### 1️⃣ Créer le dossier workspace (première fois uniquement)
 
