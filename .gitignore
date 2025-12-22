@@ -1,6 +1,6 @@
 # Dossier workspace & ai cli data (projets locaux et données)
 workspace/
-claude-code-data
+claude-code-data/
 gemini-cli-data/
 
 # Variables d'environnement
