@@ -103,35 +103,47 @@ environment:
 
 ## 🏗️ Architecture détaillée
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   ai-sandbox Container                       │
-│            (Node.js 20 + Gemini + Claude + Qwen)            │
-│                                                               │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │ Outils disponibles:                                 │   │
-│  │ - @google/gemini-cli                               │   │
-│  │ - @anthropic-ai/claude-code                        │   │
-│  │ - @qwen-code/qwen-code                             │   │
-│  │ - Git, Python 3, npm, curl                         │   │
-│  └─────────────────────────────────────────────────────┘   │
-└────┬─────────────────────────────────────────────────────────┘
-     │
-     ├──────→ OTLP gRPC (4317)
-     │         ↓
-     │    OpenTelemetry Collector
-     │         ↓
-     │    Prometheus (9090)
-     │         ↓
-     │      Grafana (3000)
-     │
-     ├──────→ Local LLMs
-     │         ↓
-     │       Ollama (11434)
-     │
-     └──────→ /workspace (Volume)
-              ↓
-          Vos projets
+```mermaid
+graph TB
+    subgraph ai_sandbox["🐳 ai-sandbox Container"]
+        direction LR
+        cli["CLI Tools"]
+        gemini["@google/gemini-cli"]
+        claude["@anthropic-ai/claude-code"]
+        qwen["@qwen-code/qwen-code"]
+        utils["Git, Python 3, npm, curl"]
+        
+        cli --> gemini
+        cli --> claude
+        cli --> qwen
+        cli --> utils
+    end
+    
+    subgraph workspace["📁 Workspace Volume"]
+        ws["/workspace - Vos projets"]
+    end
+    
+    subgraph observability["📊 Observabilité Stack"]
+        otlp["OTel Collector<br/>Port: 4317"]
+        prom["Prometheus<br/>Port: 9090"]
+        grafana["Grafana<br/>Port: 3000"]
+        
+        otlp -->|Métriques| prom
+        prom -->|Visualize| grafana
+    end
+    
+    subgraph llm["🤖 LLM local"]
+        ollama["Ollama<br/>Port: 11434"]
+    end
+    
+    ai_sandbox -->|OTLP gRPC| otlp
+    ai_sandbox -->|Montage| ws
+    ai_sandbox -->|Requêtes| ollama
+    
+    style ai_sandbox fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,color:#000
+    style workspace fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    style observability fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style llm fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
 ```
 
 ## 🛠️ Configuration détaillée
