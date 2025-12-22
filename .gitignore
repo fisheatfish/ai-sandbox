@@ -1,5 +1,7 @@
-# Dossier workspace (projets locaux et données)
+# Dossier workspace & ai cli data (projets locaux et données)
 workspace/
+claude-code-data
+gemini-cli-data/
 
 # Variables d'environnement
 .env
@@ -7,6 +9,7 @@ workspace/
 .env.*.local
 
 # Fichiers de secrets et credentials
+secrets/
 *.key
 *.pem
 *.crt

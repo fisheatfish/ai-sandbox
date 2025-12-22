@@ -107,6 +107,23 @@ colima status
 
 ### Lancer l'environnement
 
+#### 0️⃣ Configurer les secrets (première fois uniquement)
+
+Créez un dossier `secrets` et un fichier `.env` pour stocker vos clés API de manière sécurisée :
+
+```bash
+# Créer le dossier secrets
+mkdir -p secrets
+
+# Créer le fichier .env avec vos clés API
+cat > secrets/.env << EOF
+# Clés API pour les outils IA
+GITHUB_TOKEN=votre_token_github_ici
+EOF
+```
+
+**🔒 Sécurité** : Le dossier `secrets/` est automatiquement ignoré par Git. Ne partagez jamais ce fichier.
+
 #### 1️⃣ Créer le dossier workspace (première fois uniquement)
 
 Avant de lancer les services, créez un dossier `workspace` à la racine du projet. C'est là que vous mettrez tous vos projets IA :
@@ -118,7 +135,17 @@ mkdir -p workspace
 
 Ce dossier sera automatiquement monté en volume dans le conteneur `ai-sandbox` sur `/workspace`. Vous pourrez y accéder et y créer vos projets.
 
-#### 2️⃣ Lancer les services
+#### 2️⃣ Construire l'image (première fois uniquement)
+
+La première fois que vous lancez l'environnement, vous devez construire l'image Docker `ai-sandbox` :
+
+```bash
+docker build -t ai-sandbox .
+```
+
+Cette étape n'est nécessaire que lors de la première utilisation ou après des modifications du Dockerfile.
+
+#### 3️⃣ Lancer les services
 
 ```bash
 docker-compose up -d
@@ -139,7 +166,7 @@ Pour simplifier l'accès au conteneur, créez un alias `ai-sandbox` qui lance l'
 Ajoutez cette ligne à votre fichier `~/.bashrc` :
 
 ```bash
-alias ai-sandbox='cd ~/Documents/Projects/ai-docker && docker-compose up -d && docker exec -it ai-sandbox bash'
+alias ai-sandbox='cd ~/Documents/ai-docker && docker-compose up -d && docker exec -it ai-sandbox bash'
 ```
 
 Puis rechargez la configuration :
@@ -153,7 +180,7 @@ source ~/.bashrc
 Ajoutez cette ligne à votre fichier `~/.zshrc` :
 
 ```bash
-alias ai-sandbox='cd ~/Documents/Projects/ai-docker && docker-compose up -d && docker exec -it ai-sandbox bash'
+alias ai-sandbox='cd ~/Documents/ai-docker && docker-compose up -d && docker exec -it ai-sandbox bash'
 ```
 
 Puis rechargez la configuration :
@@ -176,6 +203,38 @@ Et vous serez automatiquement :
 3. ✅ Connecté au conteneur ai-sandbox
 
 **💡 Astuce** : Adaptez le chemin `~/Documents/Projects/ai-docker` à votre propre chemin d'installation si différent.
+
+## 🔧 Configuration MCP (Model Context Protocol)
+
+Le Model Context Protocol (MCP) permet d'étendre les capacités de Claude avec des outils externes comme GitHub.
+
+### Configuration GitHub pour Claude
+
+**📖 Documentation officielle** : Consultez le [guide d'installation officiel](https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md) pour plus de détails, incluant la création d'un [GitHub Token](https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md#creating-a-github-token).
+
+1. **Créer le dossier de données Claude** (première fois uniquement) :
+   ```bash
+   mkdir -p claude-code-data
+   ```
+
+2. **Lancer l'environnement** :
+   ```bash
+   docker-compose up -d
+   docker exec -it ai-sandbox bash
+   ```
+
+3. **Installer le MCP GitHub** (dans le conteneur) :
+   ```bash
+   claude mcp add --transport http github \
+     "https://api.githubcopilot.com/mcp" \
+     -H "Authorization: Bearer $GITHUB_TOKEN"
+   ```
+
+
+4. **Vérification** :
+   La configuration sera automatiquement sauvegardée dans `claude-code-data/.claude.json` et persistée entre les sessions.
+
+**🔒 Sécurité** : Le dossier `claude-code-data` est automatiquement ignoré par Git pour éviter de pousser des secrets.
 
 ### Accéder aux interfaces
 
@@ -216,23 +275,24 @@ environment:
 
 ## 🔧 Architecture
 
-```
-┌─────────────────────────────────────────────┐
-│         ai-sandbox Container                │
-│  (Node.js + Gemini CLI + Claude CLI)        │
-└────────┬────────────────────────────────────┘
-         │
-         ├── OLTP gRPC → OpenTelemetry Collector (4317)
-         ├── Local LLMs → Ollama (11434)
-         └── /workspace mount (volumes)
+```mermaid
+graph TD
+    A[ai-sandbox Container<br/>Node.js + Gemini CLI + Claude CLI] --> B[OpenTelemetry Collector<br/>Port: 4317]
+    A --> C[Ollama<br/>Port: 11434]
+    A --> D[Workspace Volume<br/>/workspace]
 
-OpenTelemetry Collector (4317)
-         │
-         └──→ Prometheus Metrics (9464)
-                    │
-                    └──→ Prometheus Server (9090)
-                             │
-                             └──→ Grafana (3000)
+    B --> E[Prometheus<br/>Port: 9090]
+    E --> F[Grafana<br/>Port: 3000]
+
+    B --> G[Prometheus Metrics<br/>Port: 9464]
+
+    classDef container fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef service fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef monitoring fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
+
+    class A container
+    class B,C,D service
+    class E,F,G monitoring
 ```
 
 ## 📁 Structure du projet

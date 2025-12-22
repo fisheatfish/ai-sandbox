@@ -90,6 +90,27 @@ colima edit
 colima restart
 ```
 
+#### Configuration des secrets
+
+**⚠️ Important** : Avant de lancer l'environnement, configurez vos secrets dans un fichier `.env` dédié.
+
+1. **Créer la structure de dossiers** :
+   ```bash
+   mkdir -p secrets
+   ```
+
+2. **Créer le fichier `.env`** :
+   ```bash
+   cat > secrets/.env << EOF
+   GITHUB_TOKEN=votre_token_github_ici
+   EOF
+   ```
+
+3. **Vérifications** :
+   - Le dossier `secrets/` est dans `.gitignore`
+   - Le fichier `.env` ne sera jamais commité
+   - Docker Compose charge automatiquement ce fichier
+
 ### Modifications des services
 
 - **Dockerfile** : Limiter à l'installation des essentiels
@@ -189,7 +210,37 @@ git pull origin main
 - Documenter les nouvelles variables d'environnement
 - Expliquer les choix techniques dans les comentaires
 
-## 🚀 Évolutions futures
+## � Configuration MCP actuelle
+
+### MCP GitHub pour Claude
+
+Le projet supporte actuellement le MCP (Model Context Protocol) GitHub pour étendre les capacités de Claude.
+
+#### Structure des données
+
+- **Dossier `claude-code-data/`** : Contient la configuration persistée des MCPs
+  - Automatiquement monté en volume dans `docker-compose.yml`
+  - **⚠️ Important** : Ce dossier est dans `.gitignore` pour éviter de pousser des secrets
+  - La configuration est sauvegardée dans `.claude.json`
+
+#### Installation d'un MCP
+
+1. Créer le dossier `claude-code-data` (si pas déjà fait)
+2. Lancer le conteneur : `docker-compose up -d && docker exec -it ai-sandbox bash`
+3. Installer le MCP GitHub :
+   ```bash
+   claude mcp add --transport http github \
+     "https://api.githubcopilot.com/mcp" \
+     -H "Authorization: Bearer $GITHUB_TOKEN"
+   ```
+
+#### Sécurité
+
+- Ne jamais commiter le dossier `claude-code-data/`
+- Utiliser des tokens GitHub personnels avec permissions minimales
+- Vérifier que `.gitignore` contient bien `claude-code-data/`
+
+## �🚀 Évolutions futures
 
 ### Phase 1 : Support MCP Servers complet
 

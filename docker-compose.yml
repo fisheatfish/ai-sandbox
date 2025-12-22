@@ -6,7 +6,9 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ~/Documents/Projects/ai-docker/workspace:/workspace
+      - ~/Documents/ai-docker/workspace:/workspace
+      - ~/Documents/ai-docker/claude-code-data/:/home/aiuser/
+      #- ~/Documents/ai-docker/gemini-cli-data:/.gemini
     working_dir: /workspace
     depends_on:
       - ollama
@@ -21,6 +23,8 @@ services:
       - GEMINI_TELEMETRY_TARGET=local
       - GEMINI_TELEMETRY_USE_COLLECTOR=true
       - GEMINI_TELEMETRY_OTLP_ENDPOINT=http://otel-collector:4317
+    env_file:
+      - ~/Documents/secrets/ai-sandbox/.env
       
   ollama:
     image: ollama/ollama:latest
