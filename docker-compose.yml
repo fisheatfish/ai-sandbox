@@ -20,7 +20,7 @@ services:
       - GEMINI_TELEMETRY_USE_COLLECTOR=true
       - GEMINI_TELEMETRY_OTLP_ENDPOINT=http://otel-collector:4317
     env_file:
-      - ${AI_SECRETS_BASE}/secrets/ai-sandbox/.env
+      - ${AI_SECRETS_BASE}/.env
       
   ollama:
     image: ollama/ollama:latest
