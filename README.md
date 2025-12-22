@@ -135,7 +135,17 @@ mkdir -p workspace
 
 Ce dossier sera automatiquement monté en volume dans le conteneur `ai-sandbox` sur `/workspace`. Vous pourrez y accéder et y créer vos projets.
 
-#### 2️⃣ Lancer les services
+#### 2️⃣ Construire l'image (première fois uniquement)
+
+La première fois que vous lancez l'environnement, vous devez construire l'image Docker `ai-sandbox` :
+
+```bash
+docker build -t ai-sandbox .
+```
+
+Cette étape n'est nécessaire que lors de la première utilisation ou après des modifications du Dockerfile.
+
+#### 3️⃣ Lancer les services
 
 ```bash
 docker-compose up -d
