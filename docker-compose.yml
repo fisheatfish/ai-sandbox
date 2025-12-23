@@ -19,6 +19,11 @@ services:
       - GEMINI_TELEMETRY_TARGET=local
       - GEMINI_TELEMETRY_USE_COLLECTOR=true
       - GEMINI_TELEMETRY_OTLP_ENDPOINT=http://otel-collector:4317
+      - CLAUDE_CODE_ENABLE_TELEMETRY=1              # Active OTel
+      - OTEL_METRICS_EXPORTER=otlp                  # ou prometheus, console
+      - OTEL_LOGS_EXPORTER=otlp                     # ou console
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
     env_file:
       - ${AI_SECRETS_BASE}/.env
       

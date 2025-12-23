@@ -101,6 +101,52 @@ environment:
   - GEMINI_TELEMETRY_OTLP_ENDPOINT=http://otel-collector:4317
 ```
 
+### Tester la télémétrie
+
+Pour vérifier que la stack d'observabilité fonctionne correctement et que la télémétrie est bien collectée :
+
+1. **Activez la télémétrie** dans `docker-compose.yml` (si ce n'est pas déjà fait) :
+   ```yaml
+   environment:
+     - GEMINI_TELEMETRY_ENABLED=true
+     - GEMINI_TELEMETRY_TARGET=local
+     - GEMINI_TELEMETRY_USE_COLLECTOR=true
+     - GEMINI_TELEMETRY_OTLP_ENDPOINT=http://otel-collector:4317
+   ```
+
+2. **Redémarrez les services** :
+   ```bash
+   docker-compose down
+   docker-compose up -d
+   ```
+
+3. **Ouvrez un shell dans le conteneur `ai-sandbox`** :
+   ```bash
+   docker exec -it ai-sandbox bash
+   cd /workspace
+   ```
+
+4. **Faites un appel test avec Gemini** :
+   ```bash
+   gemini "Fais un appel test pour vérifier la télémétrie"
+   ```
+
+5. **Vérifiez que le collector reçoit des données** :
+   ```bash
+   docker logs otel-collector --tail=50
+   ```
+
+   Vous devriez voir des logs indiquant que des métriques ont été reçues, par exemple :
+   ```
+   2025-12-23T10:15:30.123Z INFO otelcol/processor/batchprocessor@v0.100.0/processor.go:245 Received 5 metrics
+   ```
+
+6. **Vérifiez Prometheus** (http://localhost:9090) pour voir les métriques collectées.
+
+7. **Vérifiez Grafana** (http://localhost:3000) pour visualiser les métriques.
+
+**💡 Note** : Si vous ne voyez pas de métriques, vérifiez que la télémétrie est bien activée et que l'endpoint OTLP est correct.
+
 ## 🏗️ Architecture détaillée
 
 ```mermaid
