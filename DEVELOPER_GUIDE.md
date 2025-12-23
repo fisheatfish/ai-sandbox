@@ -10,9 +10,9 @@ Le Model Context Protocol (MCP) permet d'étendre les capacités de Claude avec 
 
 **📖 Documentation officielle** : Consultez le [guide d'installation officiel](https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md) pour plus de détails, incluant la création d'un [GitHub Token](https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md#creating-a-github-token).
 
-1. **Créer le dossier de données Claude** (première fois uniquement) :
+1. **Créer le dossier de données AI CLI** (première fois uniquement) :
    ```bash
-   mkdir -p claude-code-data
+   mkdir -p ai-cli-data
    ```
 
 2. **Lancer l'environnement** :
@@ -29,15 +29,15 @@ Le Model Context Protocol (MCP) permet d'étendre les capacités de Claude avec 
    ```
 
 4. **Vérification** :
-   La configuration sera automatiquement sauvegardée dans `claude-code-data/.claude.json` et persistée entre les sessions.
+   La configuration sera automatiquement sauvegardée dans `ai-cli-data/.claude.json` et persistée entre les sessions.
 
-**🔒 Sécurité** : Le dossier `claude-code-data` est automatiquement ignoré par Git pour éviter de pousser des secrets.
+**🔒 Sécurité** : Le dossier `ai-cli-data` est automatiquement ignoré par Git pour éviter de pousser des secrets.
 
 ### Configuration par projet
 
 Le MCP GitHub est configuré par défaut pour le dossier racine `/workspace`. Si vous lancez Claude depuis un autre dossier dans `workspace` (par exemple `/workspace/projects/mon-projet`), vous devez ajouter manuellement la configuration dans le fichier `.claude.json`.
 
-1. **Ouvrez le fichier** `claude-code-data/.claude.json`
+1. **Ouvrez le fichier** `ai-cli-data/.claude.json`
 2. **Ajoutez une section** dans `"projects"` en copiant la configuration de `/workspace` et en remplaçant le chemin :
 
    ```json
@@ -272,7 +272,7 @@ ollama run mistral
 ## 🔒 Sécurité
 
 - **Utilisateur non-root** : L'image utilise un utilisateur `aiuser` pour des raisons de sécurité
-- **Secrets ignorés** : Les dossiers `secrets/` et `claude-code-data/` sont ignorés par Git
+- **Secrets ignorés** : Les dossiers `secrets/` et `ai-cli-data/` sont ignorés par Git
 - **Volumes dédiés** : Les données sensibles sont stockées dans des volumes, pas dans le code
 - **Credentials** : Grafana utilise les credentials par défaut en dev (à sécuriser en production)
 
@@ -394,7 +394,7 @@ Le Model Context Protocol (MCP) permet d'étendre les capacités de Claude avec 
 
 1. **Créer le dossier de données Claude** (première fois uniquement) :
    ```bash
-   mkdir -p claude-code-data
+   mkdir -p ai-cli-data
    ```
 
 2. **Lancer l'environnement** :
@@ -411,15 +411,15 @@ Le Model Context Protocol (MCP) permet d'étendre les capacités de Claude avec 
    ```
 
 4. **Vérification** :
-   La configuration sera automatiquement sauvegardée dans `claude-code-data/.claude.json` et persistée entre les sessions.
+   La configuration sera automatiquement sauvegardée dans `ai-cli-data/.claude.json` et persistée entre les sessions.
 
-**🔒 Sécurité** : Le dossier `claude-code-data` est automatiquement ignoré par Git pour éviter de pousser des secrets.
+**🔒 Sécurité** : Le dossier `ai-cli-data` est automatiquement ignoré par Git pour éviter de pousser des secrets.
 
 ### Configuration par projet
 
 Le MCP GitHub est configuré par défaut pour le dossier racine `/workspace`. Si vous lancez Claude depuis un autre dossier dans `workspace` (par exemple `/workspace/projects/mon-projet`), vous devez ajouter manuellement la configuration dans le fichier `.claude.json`.
 
-1. **Ouvrez le fichier** `claude-code-data/.claude.json`
+1. **Ouvrez le fichier** `ai-cli-data/.claude.json`
 2. **Ajoutez une section** dans `"projects"` en copiant la configuration de `/workspace` et en remplaçant le chemin :
 
    ```json
@@ -608,7 +608,7 @@ ollama run mistral
 ## 🔒 Sécurité
 
 - **Utilisateur non-root** : L'image utilise un utilisateur `aiuser` pour des raisons de sécurité
-- **Secrets ignorés** : Les dossiers `secrets/` et `claude-code-data/` sont ignorés par Git
+- **Secrets ignorés** : Les dossiers `secrets/` et `ai-cli-data/` sont ignorés par Git
 - **Volumes dédiés** : Les données sensibles sont stockées dans des volumes, pas dans le code
 - **Credentials** : Grafana utilise les credentials par défaut en dev (à sécuriser en production)
 

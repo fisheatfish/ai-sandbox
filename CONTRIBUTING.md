@@ -218,14 +218,14 @@ Le projet supporte actuellement le MCP (Model Context Protocol) GitHub pour éte
 
 #### Structure des données
 
-- **Dossier `claude-code-data/`** : Contient la configuration persistée des MCPs
+- **Dossier `ai-cli-data/`** : Contient la configuration persistée des MCPs et données des CLIs IA
   - Automatiquement monté en volume dans `docker-compose.yml`
   - **⚠️ Important** : Ce dossier est dans `.gitignore` pour éviter de pousser des secrets
   - La configuration est sauvegardée dans `.claude.json`
 
 #### Installation d'un MCP
 
-1. Créer le dossier `claude-code-data` (si pas déjà fait)
+1. Créer le dossier `ai-cli-data` (si pas déjà fait)
 2. Lancer le conteneur : `docker-compose up -d && docker exec -it ai-sandbox bash`
 3. Installer le MCP GitHub :
    ```bash
@@ -236,9 +236,9 @@ Le projet supporte actuellement le MCP (Model Context Protocol) GitHub pour éte
 
 #### Sécurité
 
-- Ne jamais commiter le dossier `claude-code-data/`
+- Ne jamais commiter le dossier `ai-cli-data/`
 - Utiliser des tokens GitHub personnels avec permissions minimales
-- Vérifier que `.gitignore` contient bien `claude-code-data/`
+- Vérifier que `.gitignore` contient bien `ai-cli-data/`
 
 ## �🚀 Évolutions futures
 
