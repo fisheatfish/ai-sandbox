@@ -409,6 +409,13 @@ Définit l'image `ai-sandbox` avec :
 - Python 3, Git, curl
 - Utilisateur non-root pour la sécurité
 
+**⚠️ Important** : Si vous modifiez le `Dockerfile`, vous devez reconstruire l'image Docker avant de redémarrer les conteneurs :
+```bash
+docker build -t ai-sandbox .
+docker-compose down
+docker-compose up -d
+```
+
 ### docker-compose.yml
 
 Orchestre les services :
