@@ -14,11 +14,14 @@ Ce repository fournit un environnement de développement isolé, pré-configuré
 
 ### Services principaux
 
-- **ai-sandbox** : Conteneur principal Node.js 20 avec les CLIs Gemini et Claude pré-installés
+- **ai-sandbox** : Conteneur principal Node.js 20 avec les CLIs Gemini, Claude, Qwen et opencode-ai pré-installés
 - **Ollama** : Support des modèles LLM locaux (si besoin de modèles open-source)
 - **OpenTelemetry Collector** : Collecte centralisée des métriques et traces
 - **Prometheus** : Stockage et requêtes des métriques
 - **Grafana** : Visualisation et dashboards des métriques
+
+**Intégration Cloud :**
+- **AWS Bedrock** : Accès aux modèles de fondation d'AWS via opencode-ai
 
 ### Outils installés dans ai-sandbox
 
@@ -27,6 +30,7 @@ Ce repository fournit un environnement de développement isolé, pré-configuré
 - @google/gemini-cli (CLI Gemini)
 - @anthropic-ai/claude-code (CLI Claude)
 - @qwen-code/qwen-code (CLI Qwen)
+- opencode-ai (Framework IA avec intégration Bedrock AWS)
 - Git
 - Python 3 + pip
 - curl
@@ -38,6 +42,7 @@ Ce repository fournit un environnement de développement isolé, pré-configuré
 
 - **Docker et Docker Compose** installés
 - Clés API pour Gemini et/ou Claude configurées
+- **(Optionnel)** Accès AWS avec credentials configurées locales pour utiliser opencode-ai avec Bedrock
 
 #### Option 1 : Docker Desktop (Recommandé)
 
@@ -88,6 +93,53 @@ cat > $AI_SECRETS_BASE/.env << EOF
 # Clés API pour les outils IA
 GITHUB_TOKEN=votre_token_github_ici
 EOF
+```
+
+#### 📦 Configuration opencode-ai avec AWS Bedrock
+
+Ce projet intègre maintenant **opencode-ai**, un framework IA connecté à **AWS Bedrock**.
+
+**Configuration requise :**
+
+Le dossier `ai-cli-data/.config/opencode/` contient le fichier `opencode.json` pour configurer la connexion à Bedrock :
+
+```bash
+# Le fichier est situé ici :
+ai-cli-data/.config/opencode/opencode.json
+```
+
+**Configuration :**
+
+Éditez le fichier `ai-cli-data/.config/opencode/opencode.json` et remplacez les valeurs :
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "amazon-bedrock": {
+      "options": {
+        "region": "votre_region_aws",
+        "profile": "votre_aws_profile"
+      }
+    }
+  }
+}
+```
+
+**Paramètres :**
+- `region` : Région AWS où Bedrock est disponible (ex: `eu-west-3`, `us-east-1`)
+- `profile` : Profil AWS configuré localement (défini dans `~/.aws/credentials`)
+
+**Configuration AWS :**
+
+Assurez-vous d'avoir configuré votre AWS CLI :
+
+```bash
+# Configurer vos credentials AWS
+aws configure --profile your_profile
+
+# Vérifier votre configuration
+aws sts get-caller-identity --profile your_profile
 ```
 
 #### 1️⃣ Créer le dossier workspace (première fois uniquement)
@@ -191,6 +243,9 @@ claude-code --help
 
 # Qwen
 qwen-code --help
+
+# opencode-ai (AWS Bedrock)
+opencode --help
 ```
 
 ## 📚 Documentation complète
