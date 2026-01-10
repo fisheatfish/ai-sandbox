@@ -23,6 +23,7 @@ RUN npm install -g npm@11.7.0
 RUN npm install -g @google/gemini-cli@latest
 RUN npm install -g @anthropic-ai/claude-code@latest
 RUN npm install -g @qwen-code/qwen-code@latest
+RUN npm install -g opencode-ai
 
 # Utilisateur non-root (sécurité)
 RUN useradd -m aiuser
