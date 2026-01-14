@@ -65,6 +65,7 @@ services:
       - prometheus
     volumes:
       - grafana-data:/var/lib/grafana
+      - ~/.aws:/usr/share/grafana/.aws:ro
 
 volumes:
   ollama:
