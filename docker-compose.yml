@@ -8,6 +8,7 @@ services:
     volumes:
       - ${AI_DOCKER_BASE}/workspace:/workspace
       - ${AI_DOCKER_BASE}/ai-cli-data/:/home/aiuser/
+      - ~/.aws:/home/aiuser/.aws:ro
     working_dir: /workspace
     depends_on:
       - ollama
@@ -23,6 +24,10 @@ services:
       - OTEL_LOGS_EXPORTER=otlp                     # ou console
       - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      # For bedrock config
+      - AWS_PROFILE=saml
+      - AWS_REGION=eu-west-3
+
     env_file:
       - ${AI_SECRETS_BASE}/.env
       
@@ -60,6 +65,7 @@ services:
       - prometheus
     volumes:
       - grafana-data:/var/lib/grafana
+      - ~/.aws:/usr/share/grafana/.aws:ro
 
 volumes:
   ollama:
