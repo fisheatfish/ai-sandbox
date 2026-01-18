@@ -23,7 +23,12 @@ RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.1.30" && \
 ENV BUN_INSTALL=/bun
 ENV PATH="/bun/bin:${PATH}"
 
+
+# Cleaning the cach 
+RUN npm cache clean --force
+
 # Update npm to the latest version
+
 
 RUN npm install -g npm@11.7.0
 
