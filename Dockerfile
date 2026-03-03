@@ -44,9 +44,10 @@ RUN curl -fsSL https://claude.ai/install.sh | bash
 # Non-root user (security)
 RUN useradd -m aiuser
 USER aiuser
-# Install claude code usage monitoring from https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor
-ENV PATH="/home/aiuser/.local/bin:${PATH}"
-RUN uv tool install claude-monitor --force
+
+# Variables d'environnement
+ENV HOME=/home/aiuser \
+    PATH="/home/aiuser/.local/bin:${PATH}"
 
 WORKDIR /workspace
 
