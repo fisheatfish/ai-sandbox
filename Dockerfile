@@ -24,21 +24,18 @@ ENV BUN_INSTALL=/bun
 ENV PATH="/bun/bin:${PATH}"
 
 
-# Cleaning the cach 
+# Cleaning the cache
 RUN npm cache clean --force
 
 # Update npm to the latest version
-
-
 RUN npm install -g npm@11.7.0
 
-# Install AI CLIs
-RUN npm install -g @google/gemini-cli@latest
-RUN npm install -g @qwen-code/qwen-code@latest
-RUN npm install -g opencode-ai
+# Install MCP CLI tools globally
 RUN npm install -g backlog.md
 
-# Install Claude CLI
+# Install AI CLIs
+# RUN npm install -g @google/gemini-cli@latest
+# RUN npm install -g opencode-ai
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # Non-root user (security)
