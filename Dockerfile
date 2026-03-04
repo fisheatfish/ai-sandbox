@@ -1,7 +1,9 @@
 FROM node:20-slim
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Minimal dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
     ca-certificates \
@@ -12,19 +14,13 @@ RUN apt-get update && apt-get install -y \
 # Install uv (as root, in system PATH) for running serena mcp server and installing claude-monitor
 RUN curl -LsSf https://astral.sh/uv/install.sh | \
     UV_INSTALL_DIR=/usr/local/bin INSTALLER_NO_MODIFY_PATH=1 sh \
- && chmod +x /usr/local/bin/uv /usr/local/bin/uvx || true
+ && chmod +x /usr/local/bin/uv /usr/local/bin/uvx
 
-# Cleaning the cache
-RUN npm cache clean --force
-
-# Update npm to the latest version
-RUN npm install -g npm@11.7.0
-
-# Install MCP CLI tools globally
-RUN npm install -g backlog.md
-
-# Install AI CLIs
-RUN curl -fsSL https://claude.ai/install.sh | bash
+# Cleaning the cache, update npm, install MCP CLI tools and AI CLIs
+RUN npm cache clean --force \
+ && npm install -g npm@11.7.0 \
+ && npm install -g backlog.md@latest \
+ && curl -fsSL https://claude.ai/install.sh | bash
 
 # Non-root user (security)
 RUN useradd -m aiuser
