@@ -10,7 +10,6 @@ services:
     volumes:
       - ${SANDBOX_DATA_DIR}/workspace:/workspace
       - ${SANDBOX_DATA_DIR}/ai-cli-data/:/home/aiuser/
-      - ~/.aws:/home/aiuser/.aws:ro
     working_dir: /workspace
     depends_on:
       - ollama
@@ -60,7 +59,6 @@ services:
       - prometheus
     volumes:
       - grafana-data:/var/lib/grafana
-      - ~/.aws:/usr/share/grafana/.aws:ro
 
 volumes:
   ollama:
