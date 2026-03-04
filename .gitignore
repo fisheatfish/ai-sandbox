@@ -2,6 +2,7 @@
 workspace/
 ai-cli-data/
 .claude/settings.local.json
+.fuse_hidden*
 
 # Environment variables
 .env

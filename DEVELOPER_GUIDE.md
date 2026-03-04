@@ -1,6 +1,6 @@
 # Developer Guide - AI Sandbox
 
-This detailed guide covers the architecture, advanced configuration, and use cases for ai-docker.
+This detailed guide covers the architecture, advanced configuration, and use cases for ai-sandbox.
 
 ## MCP Configuration (Model Context Protocol)
 
@@ -95,42 +95,6 @@ The GitHub MCP is configured by default for the `/workspace` root folder. If you
 
 **Security**: Make sure the `CONTEXT7_TOKEN` environment variable is set before running the command.
 
-### Context7 Configuration for Gemini
-
-Gemini uses a `settings.json` file for its MCP configuration. Create or modify the Gemini configuration file:
-
-1. **Create the Gemini configuration folder** (if needed):
-   ```bash
-   mkdir -p ~/.gemini
-   ```
-
-2. **Add the Context7 configuration** in `~/.gemini/settings.json`:
-   ```json
-   {
-     "mcpServers": {
-       "context7": {
-         "httpUrl": "https://mcp.context7.com/mcp",
-         "headers": {
-           "CONTEXT7_API_KEY": "$CONTEXT7_TOKEN",
-           "Accept": "application/json, text/event-stream"
-         }
-       }
-     }
-   }
-   ```
-
-   An example copy of this configuration is available in [gemini/settings.json](gemini/settings.json).
-
-3. **Per-project configuration**:
-   For per-project configuration, create a `.gemini/settings.json` file in the project directory with the same structure.
-
-**Tip**: The `CONTEXT7_TOKEN` is stored in the `.env` file in the `AI_SECRETS_BASE` folder. Make sure to load this file before launching Gemini:
-   ```bash
-   source /path/to/AI_SECRETS_BASE/.env
-   ```
-
-**Security**: Make sure the `CONTEXT7_TOKEN` environment variable is set in your shell before launching Gemini.
-
 ## Observability in Detail
 
 The full observability stack is pre-configured:
@@ -154,79 +118,53 @@ The full observability stack is pre-configured:
 - **Default credentials**: admin / admin (change in production)
 - Persistent volume: `grafana-data:/var/lib/grafana`
 
-### Gemini Telemetry
+### Telemetry
 
-Gemini telemetry is currently **disabled by default** but can be enabled by editing `docker-compose.yml`:
+Telemetry can be configured by editing `docker-compose.yml`:
 
 ```yaml
 environment:
-  - GEMINI_TELEMETRY_ENABLED=true
-  - GEMINI_TELEMETRY_TARGET=local
-  - GEMINI_TELEMETRY_USE_COLLECTOR=true
-  - GEMINI_TELEMETRY_OTLP_ENDPOINT=http://otel-collector:4317
+  - CLAUDE_CODE_ENABLE_TELEMETRY=1
+  - OTEL_METRICS_EXPORTER=otlp
+  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
 ```
 
 ### Testing Telemetry
 
-To verify the observability stack is working correctly and telemetry is being collected:
+To verify the observability stack is working correctly:
 
-1. **Enable telemetry** in `docker-compose.yml` (if not already done):
-   ```yaml
-   environment:
-     - GEMINI_TELEMETRY_ENABLED=true
-     - GEMINI_TELEMETRY_TARGET=local
-     - GEMINI_TELEMETRY_USE_COLLECTOR=true
-     - GEMINI_TELEMETRY_OTLP_ENDPOINT=http://otel-collector:4317
-   ```
-
-2. **Restart the services**:
+1. **Restart the services**:
    ```bash
    docker-compose down
    docker-compose up -d
    ```
 
-3. **Open a shell in the `ai-sandbox` container**:
+2. **Open a shell in the `ai-sandbox` container**:
    ```bash
    docker exec -it ai-sandbox bash
    cd /workspace
    ```
 
-4. **Make a test call with Gemini**:
-   ```bash
-   gemini "Make a test call to verify telemetry"
-   ```
-
-5. **Verify the collector is receiving data**:
+3. **Verify the collector is receiving data**:
    ```bash
    docker logs otel-collector --tail=50
    ```
 
-   You should see logs indicating metrics were received, for example:
-   ```
-   2025-12-23T10:15:30.123Z INFO otelcol/processor/batchprocessor@v0.100.0/processor.go:245 Received 5 metrics
-   ```
+4. **Check Prometheus** (http://localhost:9090) to see collected metrics.
 
-6. **Check Prometheus** (http://localhost:9090) to see collected metrics.
+5. **Check Grafana** (http://localhost:3000) to visualize the metrics.
 
-7. **Check Grafana** (http://localhost:3000) to visualize the metrics.
-
-**Note**: If you don't see metrics, verify that telemetry is enabled and the OTLP endpoint is correct.
-
-## Detailed Architecture
+## Architecture
 
 ```mermaid
 graph TB
     subgraph ai_sandbox["ai-sandbox Container"]
         direction LR
         cli["CLI Tools"]
-        gemini["@google/gemini-cli"]
         claude["@anthropic-ai/claude-code"]
-        qwen["@qwen-code/qwen-code"]
         utils["Git, Python 3, npm, curl"]
 
-        cli --> gemini
         cli --> claude
-        cli --> qwen
         cli --> utils
     end
 
@@ -266,9 +204,10 @@ In `docker-compose.yml`, you can configure:
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `OLLAMA_HOST` | Ollama server URL | `http://ollama:11434` |
-| `GEMINI_TELEMETRY_ENABLED` | Enable Gemini telemetry | `true/false` |
-| `GEMINI_TELEMETRY_TARGET` | Gemini telemetry target | `local` |
-| `GEMINI_TELEMETRY_OTLP_ENDPOINT` | OpenTelemetry endpoint | `http://otel-collector:4317` |
+| `AWS_PROFILE` | AWS profile | `default` |
+| `AWS_REGION` | AWS region | `us-east-1` |
+| `CLAUDE_CODE_ENABLE_TELEMETRY` | Enable Claude telemetry | `1` |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | OpenTelemetry endpoint | `http://otel-collector:4317` |
 
 ### Volumes and Persistence
 
@@ -290,28 +229,11 @@ In `docker-compose.yml`, you can configure:
 
 ## Advanced Use Cases
 
-### Experimenting with Gemini
-
-```bash
-docker exec -it ai-sandbox bash
-gemini --help
-# Authentication and usage
-```
-
 ### Experimenting with Claude
 
 ```bash
 docker exec -it ai-sandbox bash
-claude-code --help
-# Using Claude tools
-```
-
-### Experimenting with Qwen
-
-```bash
-docker exec -it ai-sandbox bash
-qwen-code --help
-# Using Qwen tools
+claude --help
 ```
 
 ### Monitoring Your Experiments
@@ -356,33 +278,6 @@ docker-compose logs -f
 docker-compose restart
 ```
 
-### Volumes not mounting correctly (Colima)
-
-```bash
-# Restart Colima
-colima stop
-colima start
-
-# Restart containers
-docker-compose restart
-```
-
-### Not enough resources (Colima)
-
-```bash
-# Edit the configuration
-colima edit
-
-# Increase cpu, memory, disk
-# Example:
-# cpu: 4
-# memory: 8
-# disk: 100
-
-# Apply the changes
-colima restart
-```
-
 ### Grafana connection fails
 
 ```bash
@@ -398,45 +293,6 @@ docker volume rm ai-docker_grafana-data
 docker-compose up -d
 ```
 
-## Configuration Files
-
-### Dockerfile
-
-Defines the `ai-sandbox` image with:
-- Node.js 20
-- Gemini, Claude, Qwen CLIs
-- Python 3, Git, curl
-- Non-root user for security
-
-**Important**: If you modify the `Dockerfile`, you must rebuild the Docker image before restarting containers:
-```bash
-docker build -t ai-sandbox .
-docker-compose down
-docker-compose up -d
-```
-
-### docker-compose.yml
-
-Orchestrates the services:
-- `ai-sandbox`: Main container
-- `ollama`: Local LLMs
-- `otel-collector`: Metrics collection
-- `prometheus`: Metrics storage
-- `grafana`: Visualization
-
-### observability/otel-collector-config.yaml
-
-OpenTelemetry collector configuration:
-- OTLP gRPC receiver on port 4317
-- Prometheus exporter on port 9464
-- Metrics pipeline
-
-### observability/prometheus.yml
-
-Prometheus configuration:
-- Scrape interval: 15 seconds
-- OpenTelemetry collector scraping
-
 ## External Resources
 
 - [Docker Documentation](https://docs.docker.com/)
@@ -444,9 +300,7 @@ Prometheus configuration:
 - [Grafana](https://grafana.com/grafana/)
 - [Prometheus](https://prometheus.io/)
 - [Ollama](https://ollama.ai/)
-- [Google Gemini CLI](https://github.com/google/gemini-cli)
 - [Anthropic Claude](https://www.anthropic.com/)
-- [Alibaba Qwen](https://qwenlm.github.io/)
 
 ---
 

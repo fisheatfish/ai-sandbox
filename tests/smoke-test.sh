@@ -28,7 +28,7 @@ fi
 
 # Test 3: Required files exist
 echo "--- Checking required files ---"
-for f in Dockerfile docker-compose.yml README.md LICENSE CODE_OF_CONDUCT.md CONTRIBUTING.md DEVELOPER_GUIDE.md; do
+for f in Dockerfile docker-compose.yml README.md LICENSE CONTRIBUTING.md DEVELOPER_GUIDE.md; do
   if [ -f "$f" ]; then
     pass "File exists: $f"
   else

@@ -1,24 +1,22 @@
 {
   "name": "AI Sandbox (Compose)",
   "dockerComposeFile": "../docker-compose.yml",
-  "service": "ai-sandbox",  // Service name in your compose
+  "service": "ai-sandbox",
   "workspaceFolder": "/workspace",
-  "shutdownAction": "stopCompose",  // Stops all services
+  "shutdownAction": "stopCompose",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/git:1": {}
   },
-  "forwardPorts": [3000],  // Grafana, etc.
-  "postCreateCommand": "opencode models && claude-monitor --help",
+  "forwardPorts": [3000],
+  "postCreateCommand": "claude --version",
   "remoteEnv": {
-    "BUN_INSTALL": "/bun",
-    "PATH": "/home/aiuser/.local/bin:/bun/bin:/usr/local/bin:${PATH}"
+    "PATH": "/home/aiuser/.local/bin:/usr/local/bin:${PATH}"
   },
   "customizations": {
     "vscode": {
       "extensions": [
-        "anthropic.claude-code-vscode",
-        "google-cloudtools.cloudcode"
+        "anthropic.claude-code-vscode"
       ]
     }
   }
