@@ -21,8 +21,8 @@ service:
 #    traces:
 #      receivers: [otlp]
 #      processors: [batch]
-#      exporters: []   # tu pourras ajouter Tempo ou Grafana Cloud plus tard
+#      exporters: []   # you can add Tempo or Grafana Cloud later
 #    logs:
 #      receivers: [otlp]
 #      processors: [batch]
-#      exporters: []   # idem pour Loki / Grafana Cloud
+#      exporters: []   # same for Loki / Grafana Cloud

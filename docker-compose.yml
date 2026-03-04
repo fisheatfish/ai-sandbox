@@ -5,6 +5,8 @@ services:
     container_name: ai-sandbox
     stdin_open: true
     tty: true
+    ports:
+      - "6420:6420"  # backlog.md browser interface
     volumes:
       - ${AI_DOCKER_BASE}/workspace:/workspace
       - ${AI_DOCKER_BASE}/ai-cli-data/:/home/aiuser/
@@ -19,7 +21,7 @@ services:
       - GEMINI_TELEMETRY_TARGET=local
       - GEMINI_TELEMETRY_USE_COLLECTOR=true
       - GEMINI_TELEMETRY_OTLP_ENDPOINT=http://otel-collector:4317
-      - CLAUDE_CODE_ENABLE_TELEMETRY=1              # Active OTel
+      - CLAUDE_CODE_ENABLE_TELEMETRY=1              # Enable OTel
       - OTEL_METRICS_EXPORTER=otlp                  # ou prometheus, console
       - OTEL_LOGS_EXPORTER=otlp                     # ou console
       - OTEL_EXPORTER_OTLP_PROTOCOL=grpc

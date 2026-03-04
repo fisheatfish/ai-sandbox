@@ -4,7 +4,7 @@ Merci de vouloir contribuer à ce projet ! Ce document décrit les bonnes pratiq
 
 ## 🎯 Vision du projet
 
-**ai-docker** est un sandbox pour développeurs permettant d'explorer rapidement les outils IA (Gemini, Claude) dans un environnement reproductible et observable.
+**ai-sandbox** est un bac à sable permettant d'explorer rapidement les outils IA (Gemini, Claude, Qwen, OpenCode) dans un environnement reproductible et observable.
 
 ### Principes directeurs
 
@@ -28,7 +28,7 @@ Merci de vouloir contribuer à ce projet ! Ce document décrit les bonnes pratiq
 
 2. **Lancer l'environnement complet**
    ```bash
-   docker-compose up -d
+   make launch
    ```
 
 3. **Vérifier que tous les services sont up**
@@ -48,7 +48,7 @@ colima start
 # Puis procéder comme ci-dessus
 git clone <repo>
 cd ai-docker
-docker-compose up -d
+make launch
 ```
 
 **Linux**
@@ -62,7 +62,7 @@ docker ps
 # Puis lancer le projet
 git clone <repo>
 cd ai-docker
-docker-compose up -d
+make launch
 ```
 
 **Troubleshooting Colima**
@@ -226,7 +226,7 @@ Le projet supporte actuellement le MCP (Model Context Protocol) GitHub pour éte
 #### Installation d'un MCP
 
 1. Créer le dossier `ai-cli-data` (si pas déjà fait)
-2. Lancer le conteneur : `docker-compose up -d && docker exec -it ai-sandbox bash`
+2. Lancer le conteneur : `make shell`
 3. Installer le MCP GitHub :
    ```bash
    claude mcp add --transport http github \
@@ -331,7 +331,7 @@ Le projet supporte actuellement le MCP (Model Context Protocol) GitHub pour éte
 
 ## 📋 Checklist pour une PR
 
-- [ ] Code testé localement avec `docker-compose up`
+- [ ] Code testé localement avec `make launch`
 - [ ] Messages de commit clairs et conventionnels
 - [ ] README mis à jour si nécessaire
 - [ ] Variables d'environnement documentées
