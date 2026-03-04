@@ -1,6 +1,7 @@
 # Workspace & AI CLI data (local projects and data)
 workspace/
 ai-cli-data/
+.claude/settings.local.json
 
 # Environment variables
 .env
