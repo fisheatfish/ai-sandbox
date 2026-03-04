@@ -23,25 +23,25 @@ RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.1.30" && \
 ENV BUN_INSTALL=/bun
 ENV PATH="/bun/bin:${PATH}"
 
-# Update npm to the latest version
 
+# Cleaning the cache
+RUN npm cache clean --force
+
+# Update npm to the latest version
 RUN npm install -g npm@11.7.0
 
-# Install AI CLIs
-RUN npm install -g @google/gemini-cli@latest
-RUN npm install -g @qwen-code/qwen-code@latest
-RUN npm install -g opencode-ai
+# Install MCP CLI tools globally
 RUN npm install -g backlog.md
 
-# Install Claude CLI
+# Install AI CLIs
+# RUN npm install -g @google/gemini-cli@latest
+# RUN npm install -g opencode-ai
 RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # Non-root user (security)
 RUN useradd -m aiuser
 USER aiuser
-# Install claude code usage monitoring from https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor
 ENV PATH="/home/aiuser/.local/bin:${PATH}"
-RUN uv tool install claude-monitor --force
 
 WORKDIR /workspace
 
