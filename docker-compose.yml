@@ -8,8 +8,8 @@ services:
     ports:
       - "6420:6420"  # backlog.md browser interface
     volumes:
-      - ${AI_DOCKER_BASE}/workspace:/workspace
-      - ${AI_DOCKER_BASE}/ai-cli-data/:/home/aiuser/
+      - ${SANDBOX_DATA_DIR}/workspace:/workspace
+      - ${SANDBOX_DATA_DIR}/ai-cli-data/:/home/aiuser/
       - ~/.aws:/home/aiuser/.aws:ro
     working_dir: /workspace
     depends_on:
@@ -22,11 +22,9 @@ services:
       - OTEL_LOGS_EXPORTER=otlp                     # ou console
       - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-      - AWS_PROFILE=${AWS_PROFILE:-default}
-      - AWS_REGION=${AWS_REGION:-us-east-1}
 
     env_file:
-      - ${AI_SECRETS_BASE}/.env
+      - ${SANDBOX_SECRETS_DIR}/.env
 
   ollama:
     image: ollama/ollama:latest

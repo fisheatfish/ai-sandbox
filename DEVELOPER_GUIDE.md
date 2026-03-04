@@ -64,7 +64,7 @@ The GitHub MCP is configured by default for the `/workspace` root folder. If you
 
 3. **Replace** `$GITHUB_TOKEN` with your actual GitHub token.
 
-**Tip**: The `GITHUB_TOKEN` is stored in the `.env` file in the `AI_SECRETS_BASE` folder.
+**Tip**: The `GITHUB_TOKEN` is stored in the `.env` file in the `SANDBOX_SECRETS_DIR` folder.
 
 **Note**: Repeat this step for each new project where you want to use the GitHub MCP.
 
@@ -88,9 +88,9 @@ The GitHub MCP is configured by default for the `/workspace` root folder. If you
 3. **Verification**:
    The configuration will be automatically saved in `ai-cli-data/.claude.json` and persisted between sessions.
 
-**Tip**: The `CONTEXT7_TOKEN` is stored in the `.env` file in the `AI_SECRETS_BASE` folder. Make sure to load this file before running the commands:
+**Tip**: The `CONTEXT7_TOKEN` is stored in the `.env` file in the `SANDBOX_SECRETS_DIR` folder. Make sure to load this file before running the commands:
    ```bash
-   source /path/to/AI_SECRETS_BASE/.env
+   source /path/to/SANDBOX_SECRETS_DIR/.env
    ```
 
 **Security**: Make sure the `CONTEXT7_TOKEN` environment variable is set before running the command.
@@ -204,8 +204,6 @@ In `docker-compose.yml`, you can configure:
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `OLLAMA_HOST` | Ollama server URL | `http://ollama:11434` |
-| `AWS_PROFILE` | AWS profile | `default` |
-| `AWS_REGION` | AWS region | `us-east-1` |
 | `CLAUDE_CODE_ENABLE_TELEMETRY` | Enable Claude telemetry | `1` |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | OpenTelemetry endpoint | `http://otel-collector:4317` |
 

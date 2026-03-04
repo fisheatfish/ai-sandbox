@@ -21,21 +21,24 @@ A Docker sandbox for developers who want to explore and experiment with AI codin
 cp .example.env .env
 ```
 
-Edit `.env` and set your local paths:
+Edit `.env` with two paths:
 
 ```dotenv
-AI_DOCKER_BASE=/path/to/this/project
-AI_SECRETS_BASE=/path/to/your/secrets
-AWS_PROFILE=default
-AWS_REGION=us-east-1
+# Where to store persistent data (workspace, CLI config)
+SANDBOX_DATA_DIR=/path/to/your/sandbox-data
+
+# Folder containing a .env file with your API keys
+SANDBOX_SECRETS_DIR=/path/to/your/secrets
 ```
 
 ### 2. Configure secrets
 
-```bash
-mkdir -p $AI_SECRETS_BASE
+Create a `.env` file inside your secrets directory with your API keys:
 
-cat > $AI_SECRETS_BASE/.env << EOF
+```bash
+mkdir -p $SANDBOX_SECRETS_DIR
+
+cat > $SANDBOX_SECRETS_DIR/.env << EOF
 GITHUB_TOKEN=your_github_token_here
 EOF
 ```
@@ -43,7 +46,7 @@ EOF
 ### 3. Create workspace and build
 
 ```bash
-mkdir -p workspace
+mkdir -p $(grep SANDBOX_DATA_DIR .env | cut -d= -f2)/workspace
 docker build -t ai-sandbox .
 ```
 
