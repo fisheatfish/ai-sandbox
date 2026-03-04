@@ -65,6 +65,16 @@ docker exec -it ai-sandbox bash
 | Prometheus | http://localhost:9090 |
 | Ollama | http://localhost:11434 |
 
+## Quick Access Alias
+
+Add this alias to your `~/.bashrc` or `~/.zshrc` to quickly start the sandbox and navigate to a project:
+
+```bash
+alias ai-sandbox="cd /path/to/ai-sandbox/ && docker-compose up -d --build && docker exec -it ai-sandbox bash"
+```
+
+> Replace `/path/to/ai-sandbox/` with the actual path to your local clone.
+
 ## Using the CLI
 
 ```bash
