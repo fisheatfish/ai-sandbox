@@ -21,4 +21,10 @@ jobs:
         run: docker build -t ai-sandbox .
 
       - name: Validate docker-compose config
-        run: docker compose config --quiet
+        run: |
+          mkdir -p /tmp/sandbox
+          touch /tmp/sandbox/.env
+          docker compose config --quiet
+        env:
+          SANDBOX_DATA_DIR: /tmp/sandbox
+          SANDBOX_SECRETS_DIR: /tmp/sandbox
