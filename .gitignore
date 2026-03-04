@@ -1,20 +1,20 @@
-# Dossier workspace & ai cli data (projets locaux et données)
+# Workspace & AI CLI data (local projects and data)
 workspace/
 ai-cli-data/
 
-# Variables d'environnement
+# Environment variables
 .env
 .env.local
 .env.*.local
 
-# Fichiers de secrets et credentials
+# Secrets and credentials
 secrets/
 *.key
 *.pem
 *.crt
 *.pfx
 
-# Docker volumes et données persistantes
+# Docker volumes and persistent data
 ollama/
 grafana-data/
 prometheus-data/
@@ -24,7 +24,7 @@ prometheus-data/
 logs/
 *.out
 
-# Cache et artifacts
+# Cache and artifacts
 __pycache__/
 *.pyc
 *.pyo
@@ -35,7 +35,7 @@ node_modules/
 dist/
 build/
 
-# IDE et éditeurs
+# IDE and editors
 .vscode/
 .idea/
 *.swp
@@ -50,18 +50,18 @@ build/
 ehthumbs.db
 Thumbs.db
 
-# Fichiers temporaires
+# Temporary files
 *.tmp
 *.temp
 *.bak
 *.backup
 
-# Système
+# System
 .DS_Store
 .AppleDouble
 .LSOverride
 
-# Historique bash/zsh
+# Bash/zsh history
 .bash_history
 .zsh_history
 
@@ -82,6 +82,6 @@ env/
 ENV/
 .venv/
 
-# OS spécifiques
+# OS specific
 Thumbs.db
 *.egg-info/

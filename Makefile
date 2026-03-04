@@ -19,3 +19,7 @@ run:
 .PHONY: shell ## 🐚 open a bash shell inside the running container
 shell:
 	docker-compose up -d --build && docker exec -it ai-sandbox bash
+
+.PHONY: test ## 🧪 run smoke tests
+test:
+	bash tests/smoke-test.sh

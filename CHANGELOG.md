@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-12-22
 
 ### Added
-- Initial release of AI Docker Sandbox
+- Initial release of AI Sandbox
 - Docker Compose setup with ai-sandbox, Ollama, OpenTelemetry Collector, Prometheus, and Grafana
 - Node.js environment with Gemini CLI, Claude CLI, and Qwen CLI pre-installed
 - Volume mounts for workspace, Claude data, and Gemini data persistence

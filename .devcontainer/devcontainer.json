@@ -1,9 +1,9 @@
 {
   "name": "AI Sandbox (Compose)",
   "dockerComposeFile": "../docker-compose.yml",
-  "service": "ai-sandbox",  // Nom du service dans votre compose
+  "service": "ai-sandbox",  // Service name in your compose
   "workspaceFolder": "/workspace",
-  "shutdownAction": "stopCompose",  // Arrête tous services
+  "shutdownAction": "stopCompose",  // Stops all services
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/git:1": {}

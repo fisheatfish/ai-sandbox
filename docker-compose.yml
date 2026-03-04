@@ -48,7 +48,7 @@ services:
       - ./observability/otel-collector-config.yaml:/otel-local-config.yaml
     ports:
       - "4317:4317"   # OTLP gRPC
-      - "9464:9464"   # métriques exposées pour Prometheus
+      - "9464:9464"   # metrics exposed for Prometheus
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus

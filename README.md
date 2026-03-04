@@ -1,116 +1,116 @@
-# AI Docker Sandbox
+# AI Sandbox
 
-Une sandbox Docker complète pour les développeurs qui souhaitent explorer et expérimenter avec les outils IA modernes : **Gemini**, **Claude** et **Qwen**.
+A complete Docker sandbox for developers who want to explore and experiment with modern AI tools: **Gemini**, **Claude**, and **Qwen**.
 
-## 🎯 Objectif
+## Objective
 
-Ce repository fournit un environnement de développement isolé, pré-configuré et reproductible pour :
-- Expérimenter avec les APIs et CLIs de Google Gemini, Anthropic Claude et Alibaba Qwen
-- Développer des applications IA sans poluer votre machine locale
-- Tester des configurations complexes et des intégrations
-- Bénéficier d'une observabilité complète de vos expériences
+This repository provides an isolated, pre-configured, and reproducible development environment to:
+- Experiment with the APIs and CLIs of Google Gemini, Anthropic Claude, and Alibaba Qwen
+- Develop AI applications without polluting your local machine
+- Test complex configurations and integrations
+- Benefit from full observability of your experiments
 
-## 📋 Contenu
+## Contents
 
-### Services principaux
+### Main Services
 
-- **ai-sandbox** : Conteneur principal Node.js 20 avec les CLIs Gemini, Claude, Qwen et opencode-ai pré-installés
-- **Ollama** : Support des modèles LLM locaux (si besoin de modèles open-source)
-- **OpenTelemetry Collector** : Collecte centralisée des métriques et traces
-- **Prometheus** : Stockage et requêtes des métriques
-- **Grafana** : Visualisation et dashboards des métriques
+- **ai-sandbox**: Main Node.js 20 container with Gemini, Claude, Qwen, and opencode-ai CLIs pre-installed
+- **Ollama**: Local LLM model support (for open-source models)
+- **OpenTelemetry Collector**: Centralized metrics and traces collection
+- **Prometheus**: Metrics storage and querying
+- **Grafana**: Metrics visualization and dashboards
 
-**Intégration Cloud :**
-- **AWS Bedrock** : Accès aux modèles de fondation d'AWS via opencode-ai
+**Cloud Integration:**
+- **AWS Bedrock**: Access to AWS foundation models via opencode-ai
 
-### Outils installés dans ai-sandbox
+### Tools Installed in ai-sandbox
 
 ```dockerfile
 - Node.js 20
-- @google/gemini-cli (CLI Gemini)
-- @anthropic-ai/claude-code (CLI Claude)
-- @qwen-code/qwen-code (CLI Qwen)
-- opencode-ai (Framework IA avec intégration Bedrock AWS)
+- @google/gemini-cli (Gemini CLI)
+- @anthropic-ai/claude-code (Claude CLI)
+- @qwen-code/qwen-code (Qwen CLI)
+- opencode-ai (AI Framework with AWS Bedrock integration)
 - Git
 - Python 3 + pip
 - curl
 ```
 
-## 🚀 Démarrage rapide
+## Quick Start
 
-### Prérequis
+### Prerequisites
 
-- **Docker et Docker Compose** installés
-- Clés API pour Gemini et/ou Claude configurées
-- **(Optionnel)** Accès AWS avec credentials configurées locales pour utiliser opencode-ai avec Bedrock
+- **Docker and Docker Compose** installed
+- API keys for Gemini and/or Claude configured
+- **(Optional)** AWS access with locally configured credentials to use opencode-ai with Bedrock
 
-#### Option 1 : Docker Desktop (Recommandé)
+#### Option 1: Docker Desktop (Recommended)
 
-- **macOS** : https://www.docker.com/products/docker-desktop
-- **Linux** : https://docs.docker.com/engine/install/
-- **Windows** : https://www.docker.com/products/docker-desktop (avec WSL 2)
+- **macOS**: https://www.docker.com/products/docker-desktop
+- **Linux**: https://docs.docker.com/engine/install/
+- **Windows**: https://www.docker.com/products/docker-desktop (with WSL 2)
 
-#### Option 2 : Colima (Alternative Open Source)
+#### Option 2: Colima (Open Source Alternative)
 
-Si vous ne pouvez pas installer Docker Desktop, **Colima** est une excellente alternative légère et open-source. Vous pouvez suivre [ce tuto](https://blog.stephane-robert.info/post/colima/)
+If you cannot install Docker Desktop, **Colima** is an excellent lightweight open-source alternative.
 
-### Lancer l'environnement
+### Launch the Environment
 
-#### 0️⃣ Configurer les variables d'environnement (première fois uniquement)
+#### 0. Configure environment variables (first time only)
 
-Ce projet utilise des variables d'environnement pour les chemins locaux afin de s'adapter à différentes configurations. Vous devez créer un fichier `.env` à la racine du projet :
+This project uses environment variables for local paths to adapt to different configurations. You need to create a `.env` file at the project root:
 
-**Étape 1 : Copier le fichier template**
+**Step 1: Copy the template file**
 
 ```bash
-cp .exemple.env .env
+cp .example.env .env
 ```
 
-**Étape 2 : Éditer le fichier `.env`**
+**Step 2: Edit the `.env` file**
 
-Ouvrez le fichier `.env` créé et remplacez les valeurs par vos chemins absolus locaux :
+Open the created `.env` file and replace the values with your local absolute paths:
 
 ```dotenv
-# Chemin absolu vers le répertoire racine du projet
-AI_DOCKER_BASE=/Users/votre_username/Documents/Projects/ai-docker
+# Absolute path to the project root directory
+AI_DOCKER_BASE=/Users/your_username/Documents/Projects/ai-docker
 
-# Chemin absolu vers le répertoire contenant vos secrets et clés API
-AI_SECRETS_BASE=/Users/votre_username/Documents/Secrets/ai-docker
+# Absolute path to the directory containing your secrets and API keys
+AI_SECRETS_BASE=/Users/your_username/Documents/Secrets/ai-docker
 ```
 
-**🔒 Sécurité** : Le fichier `.env` est automatiquement ignoré par Git. Ne partagez jamais ce fichier qui peut contenir des informations sensibles.
+**Security**: The `.env` file is automatically ignored by Git. Never share this file as it may contain sensitive information.
 
-#### Configurer vos secrets et clés API
+#### Configure your secrets and API keys
 
-Créez également un dossier `secrets` au chemin spécifié dans `AI_SECRETS_BASE` pour stocker vos clés API :
+Also create a `secrets` folder at the path specified in `AI_SECRETS_BASE` to store your API keys:
 
 ```bash
-# Créer le dossier secrets
+# Create the secrets folder
 mkdir -p $AI_SECRETS_BASE
 
-# Créer un fichier .env avec vos clés API
+# Create a .env file with your API keys
 cat > $AI_SECRETS_BASE/.env << EOF
-# Clés API pour les outils IA
-GITHUB_TOKEN=votre_token_github_ici
+# API keys for AI tools
+GITHUB_TOKEN=your_github_token_here
 EOF
 ```
 
-#### 📦 Configuration opencode-ai avec AWS Bedrock
+#### opencode-ai Configuration with AWS Bedrock
 
-Ce projet intègre maintenant **opencode-ai**, un framework IA connecté à **AWS Bedrock**.
+This project integrates **opencode-ai**, an AI framework connected to **AWS Bedrock**.
 
-**Configuration requise :**
+**Required configuration:**
 
-Le dossier `ai-cli-data/.config/opencode/` contient le fichier `opencode.json` pour configurer la connexion à Bedrock :
+The `ai-cli-data/.config/opencode/` folder contains the `opencode.json` file to configure the Bedrock connection:
 
 ```bash
-# Le fichier est situé ici :
+# The file is located here:
 ai-cli-data/.config/opencode/opencode.json
 ```
 
-**Configuration :**
+**Configuration:**
 
-Éditez le fichier `ai-cli-data/.config/opencode/opencode.json` et remplacez les valeurs :
+Edit the `ai-cli-data/.config/opencode/opencode.json` file and replace the values:
 
 ```json
 {
@@ -118,122 +118,122 @@ ai-cli-data/.config/opencode/opencode.json
   "provider": {
     "amazon-bedrock": {
       "options": {
-        "region": "votre_region_aws",
-        "profile": "votre_aws_profile"
+        "region": "your_aws_region",
+        "profile": "your_aws_profile"
       }
     }
   }
 }
 ```
 
-**Paramètres :**
-- `region` : Région AWS où Bedrock est disponible (ex: `eu-west-3`, `us-east-1`)
-- `profile` : Profil AWS configuré localement (défini dans `~/.aws/credentials`)
+**Parameters:**
+- `region`: AWS region where Bedrock is available (e.g., `eu-west-3`, `us-east-1`)
+- `profile`: Locally configured AWS profile (defined in `~/.aws/credentials`)
 
-**Configuration AWS :**
+**AWS Configuration:**
 
-Assurez-vous d'avoir configuré votre AWS CLI :
+Make sure you have configured your AWS CLI:
 
 ```bash
-# Configurer vos credentials AWS
+# Configure your AWS credentials
 aws configure --profile your_profile
 
-# Vérifier votre configuration
+# Verify your configuration
 aws sts get-caller-identity --profile your_profile
 ```
 
-#### 1️⃣ Créer le dossier workspace (première fois uniquement)
+#### 1. Create the workspace folder (first time only)
 
-Avant de lancer les services, créez un dossier `workspace` à la racine du projet. C'est là que vous mettrez tous vos projets IA :
+Before launching the services, create a `workspace` folder at the project root. This is where you will put all your AI projects:
 
 ```bash
-# Depuis la racine du projet
+# From the project root
 mkdir -p workspace
 ```
 
-Ce dossier sera automatiquement monté en volume dans le conteneur `ai-sandbox` sur `/workspace`. Vous pourrez y accéder et y créer vos projets.
+This folder will be automatically mounted as a volume in the `ai-sandbox` container at `/workspace`. You can access it and create your projects there.
 
-#### 2️⃣ Construire l'image (première fois uniquement)
+#### 2. Build the image (first time only)
 
-La première fois que vous lancez l'environnement, vous devez construire l'image Docker `ai-sandbox` :
+The first time you launch the environment, you need to build the `ai-sandbox` Docker image:
 
 ```bash
 docker build -t ai-sandbox .
 ```
 
-Cette étape n'est nécessaire que lors de la première utilisation ou après des modifications du Dockerfile.
+This step is only needed on first use or after changes to the Dockerfile.
 
-#### 3️⃣ Lancer les services
+#### 3. Start the services
 
 ```bash
 docker-compose up -d
 ```
 
-Cela démarre tous les services. Pour entrer dans le conteneur ai-sandbox :
+This starts all services. To enter the ai-sandbox container:
 
 ```bash
 docker exec -it ai-sandbox bash
 ```
 
-### Alias pratique (Optionnel)
+### Convenient Alias (Optional)
 
-Pour simplifier l'accès au conteneur, créez un alias `ai-sandbox` qui lance l'environnement et entre dans le conteneur en une seule commande.
+To simplify container access, create an `ai-sandbox` alias that launches the environment and enters the container in a single command.
 
-#### Pour Bash
+#### For Bash
 
-Ajoutez cette ligne à votre fichier `~/.bashrc` :
+Add this line to your `~/.bashrc` file:
 
 ```bash
 alias ai-sandbox='cd ~/Documents/ai-docker && docker-compose up -d && docker exec -it ai-sandbox bash'
 ```
 
-Puis rechargez la configuration :
+Then reload the configuration:
 
 ```bash
 source ~/.bashrc
 ```
 
-#### Pour Zsh
+#### For Zsh
 
-Ajoutez cette ligne à votre fichier `~/.zshrc` :
+Add this line to your `~/.zshrc` file:
 
 ```bash
 alias ai-sandbox='cd ~/Documents/ai-docker && docker-compose up -d && docker exec -it ai-sandbox bash'
 ```
 
-Puis rechargez la configuration :
+Then reload the configuration:
 
 ```bash
 source ~/.zshrc
 ```
 
-#### Utilisation
+#### Usage
 
-Ensuite, il vous suffit de taper :
+Then simply type:
 
 ```bash
 ai-sandbox
 ```
 
-Et vous serez automatiquement :
-1. ✅ Dans le bon répertoire du projet
-2. ✅ Tous les services (Ollama, Prometheus, Grafana, etc.) seront lancés
-3. ✅ Connecté au conteneur ai-sandbox
+And you will automatically be:
+1. In the correct project directory
+2. All services (Ollama, Prometheus, Grafana, etc.) will be started
+3. Connected to the ai-sandbox container
 
-**💡 Astuce** : Adaptez le chemin `~/Documents/Projects/ai-docker` à votre propre chemin d'installation si différent.
+**Tip**: Adjust the path `~/Documents/Projects/ai-docker` to your own installation path if different.
 
-## �️ Utilisation rapide
+## Quick Usage
 
-### Accéder aux interfaces
+### Access the Interfaces
 
-- **Grafana** (dashboards) : http://localhost:3000
-- **Prometheus** (métriques) : http://localhost:9090
-- **Ollama** (LLMs locaux) : http://localhost:11434
+- **Grafana** (dashboards): http://localhost:3000
+- **Prometheus** (metrics): http://localhost:9090
+- **Ollama** (local LLMs): http://localhost:11434
 
-### Utiliser les CLIs IA
+### Use the AI CLIs
 
 ```bash
-# Depuis le conteneur ai-sandbox
+# From the ai-sandbox container
 
 # Gemini
 gemini --help
@@ -248,44 +248,44 @@ qwen-code --help
 opencode --help
 ```
 
-## 📚 Documentation complète
+## Full Documentation
 
-| Document | Contenu |
-|----------|---------|
-| [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | Configuration MCP, architecture, configuration détaillée, troubleshooting |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Guide de contribution, workflow Git, bonnes pratiques, roadmap |
+| Document | Contents |
+|----------|----------|
+| [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | MCP configuration, architecture, detailed setup, troubleshooting |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guide, Git workflow, best practices, roadmap |
 
-Pour approfondir : **Consultez le [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** qui couvre :
-- ✅ Configuration MCP pour Claude + GitHub
-- ✅ Observabilité détaillée (OpenTelemetry, Prometheus, Grafana)
-- ✅ Configuration avancée
-- ✅ Cas d'usage (Gemini, Claude, Qwen, Ollama)
-- ✅ Troubleshooting
+For more details, see the [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) which covers:
+- MCP configuration for Claude + GitHub
+- Detailed observability (OpenTelemetry, Prometheus, Grafana)
+- Advanced configuration
+- Use cases (Gemini, Claude, Qwen, Ollama)
+- Troubleshooting
 
-## 🤝 Contribution
+## Contributing
 
-Pour contribuer à ce projet, consultez [CONTRIBUTING.md](CONTRIBUTING.md) qui explique :
-- ✅ Workflow Git (feature branches, PR, etc.)
-- ✅ Bonnes pratiques
-- ✅ Roadmap future
+To contribute to this project, see [CONTRIBUTING.md](CONTRIBUTING.md) which explains:
+- Git workflow (feature branches, PRs, etc.)
+- Best practices
+- Future roadmap
 
-## ❓ Questions rapides
+## FAQ
 
-**Comment ajouter une clé API ?**
-Créez un fichier `.env` à la racine et chargez-le dans docker-compose.yml.
+**How do I add an API key?**
+Create a `.env` file at the root and load it in docker-compose.yml.
 
-**Comment persister mes données entre sessions ?**
-Le dossier `/workspace` est automatiquement monté en volume.
+**How do I persist my data between sessions?**
+The `/workspace` folder is automatically mounted as a volume.
 
-**Comment monitorer mes expériences ?**
-Activez la télémétrie dans docker-compose.yml et utilisez Grafana.
+**How do I monitor my experiments?**
+Enable telemetry in docker-compose.yml and use Grafana.
 
-**Besoin d'aide ?** → Consultez le [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md#troubleshooting).
+**Need help?** See the [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md#troubleshooting).
 
-## 📝 Licence
+## License
 
-[À définir selon vos préférences]
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-**Prêt ?** 🚀 Lancez `docker-compose up -d` et commencez à explorer l'IA !
+**Ready?** Run `docker-compose up -d` and start exploring AI!
