@@ -8,8 +8,8 @@ services:
     ports:
       - "6420:6420"  # backlog.md browser interface
     volumes:
-      - ${SANDBOX_DATA_DIR}/workspace:/workspace
-      - ${SANDBOX_DATA_DIR}/ai-cli-data/:/home/aiuser/
+      - ${SANDBOX_WORKSPACE}/workspace:/workspace
+      - ${SANDBOX_WORKSPACE}/ai-cli-data/:/home/aiuser/
     working_dir: /workspace
     depends_on:
       - ollama

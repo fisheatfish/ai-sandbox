@@ -64,7 +64,7 @@ The GitHub MCP is configured by default for the `/workspace` root folder. If you
 
 3. **Replace** `$GITHUB_TOKEN` with your actual GitHub token.
 
-**Tip**: The `GITHUB_TOKEN` is stored in the `.env` file in the `SANDBOX_SECRETS_DIR` folder.
+**Tip**: The `GITHUB_TOKEN` is stored in the `.env` file in the `SANDBOX_SECRETS_DIR` folder. This folder must be kept **outside** any repository where an AI coding assistant runs, to prevent accidental exposure of API keys.
 
 **Note**: Repeat this step for each new project where you want to use the GitHub MCP.
 
@@ -240,6 +240,49 @@ claude --help
 2. **Access Grafana**: http://localhost:3000
 3. **Configure Prometheus** as datasource (http://otel-collector:9464)
 4. **Create custom dashboards**
+
+### Letting Claude Code Push Autonomously
+
+To let Claude Code create branches, commit, and push on its own, you need to configure git credentials inside the container.
+
+#### 1. Generate a GitHub Personal Access Token
+
+Create a [fine-grained token](https://github.com/settings/tokens?type=beta) with **Contents** (read/write) permission on the repos you want Claude to push to.
+
+Add it to your secrets `.env` file on your `SANDBOX_SECRETS_DIR`:
+
+```dotenv
+GITHUB_TOKEN=ghp_xxxxxxxxxxxx
+```
+
+#### 2. Configure git inside the container
+
+Once inside the container, set up your identity and credential helper:
+
+```bash
+git config --global user.name "Gireg Roussel"
+git config --global user.email "giregroussel@free.fr"
+git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+```
+
+> You can add these commands to a startup script to avoid repeating them each session.
+
+#### 3. Give Claude Code the right permissions
+
+Launch Claude Code in the project directory:
+
+```bash
+cd /path/to/your/project
+claude
+```
+
+Then ask Claude to work autonomously, for example:
+
+```
+> Refactor the auth module, then create a branch, commit, and push a PR.
+```
+
+Claude Code will be able to run `git checkout -b`, `git commit`, `git push`, and `gh pr create` on its own.
 
 ### Using Ollama for Local Models
 
