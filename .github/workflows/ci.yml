@@ -26,5 +26,5 @@ jobs:
           touch /tmp/sandbox/.env
           docker compose config --quiet
         env:
-          SANDBOX_DATA_DIR: /tmp/sandbox
+          SANDBOX_WORKSPACE: /tmp/sandbox
           SANDBOX_SECRETS_DIR: /tmp/sandbox
