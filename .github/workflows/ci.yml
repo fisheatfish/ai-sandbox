@@ -22,9 +22,7 @@ jobs:
 
       - name: Validate docker-compose config
         run: |
-          mkdir -p /tmp/sandbox
-          touch /tmp/sandbox/.env
+          touch .env
           docker compose config --quiet
         env:
           SANDBOX_WORKSPACE: /tmp/sandbox
-          SANDBOX_SECRETS_DIR: /tmp/sandbox

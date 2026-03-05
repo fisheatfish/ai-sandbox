@@ -23,7 +23,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
 
     env_file:
-      - ${SANDBOX_SECRETS_DIR}/.env
+      - .env
 
   ollama:
     image: ollama/ollama:latest
