@@ -92,23 +92,9 @@ claude --help
 | [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | MCP configuration, autonomous git push, observability, architecture, troubleshooting |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Git workflow, PR checklist |
 
-## Security Considerations
-
-Before using this tool, be aware of the following:
-
-- **Secrets in container environment**: The `env_file` directive injects API keys into the container's environment variables. Any process running inside the container (including AI agents) can read them via `env` or `/proc`. Keep `SANDBOX_SECRETS_DIR` **outside** any repository the AI assistant can access, and only include the minimum required keys.
-- **No resource limits**: Containers have no CPU/memory limits by default. Consider adding `deploy.resources.limits` in `docker-compose.yml` for production use.
-- **No network isolation**: All services share the default Docker network. The AI sandbox container can reach Ollama, Prometheus, and Grafana directly.
-- **Grafana default credentials**: The Grafana instance uses `admin/admin`. Change these if exposing the stack beyond localhost.
-- **Ollama runs as root**: The official Ollama image runs as root by default.
-
 ## TODO / Roadmap
 
 - [ ] Package and publish the Docker image to a container registry (GHCR / Docker Hub)
-- [ ] Add container resource limits (CPU/memory) to `docker-compose.yml`
-- [ ] Network isolation: separate internal services from the AI sandbox
-- [ ] Support injecting secrets via Docker secrets instead of `env_file`
-- [ ] Harden Grafana default credentials via environment variables
 - [ ] Add a startup script to automate git config inside the container
 - [ ] Support additional AI coding tools (Codex, Gemini CLI, etc.)
 

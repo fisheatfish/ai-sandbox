@@ -260,10 +260,12 @@ GITHUB_TOKEN=ghp_xxxxxxxxxxxx
 Once inside the container, set up your identity and credential helper:
 
 ```bash
-git config --global user.name "Gireg Roussel"
-git config --global user.email "giregroussel@free.fr"
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
 git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
 ```
+
+> ⚠️ **Security note:** The `insteadOf` rule stores the token in `~/.gitconfig` in plain text. Any process running inside the container (including AI agents) can read it. Make sure the token has the minimum required scopes and consider rotating it regularly.
 
 > You can add these commands to a startup script to avoid repeating them each session.
 
