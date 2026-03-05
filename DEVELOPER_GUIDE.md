@@ -282,7 +282,9 @@ Then ask Claude to work autonomously, for example:
 > Refactor the auth module, then create a branch, commit, and push a PR.
 ```
 
-Claude Code will be able to run `git checkout -b`, `git commit`, `git push`, and `gh pr create` on its own.
+Claude Code will be able to run `git checkout -b`, `git commit`, `git push`.
+
+For now `gh` CLI commands won't work because it is not installed in the container, but you can easily add it to the Dockerfile if needed.
 
 ### Using Ollama for Local Models
 
