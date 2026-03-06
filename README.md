@@ -21,32 +21,30 @@ A Docker sandbox for developers who want to explore and experiment with AI codin
 cp .example.env .env
 ```
 
-Edit `.env` with two paths:
+Edit `.env` with your workspace path and API keys:
 
 ```dotenv
 # Root directory for sandbox data (workspace, CLI config)
 SANDBOX_WORKSPACE=/path/to/your/sandbox-workspace
 
-# Directory containing a .env file with your API keys (GITHUB_TOKEN, etc.)
-# This directory MUST be outside any repository where you run an AI coding
-# assistant, so that secrets are never exposed to or leaked by the agent.
-SANDBOX_SECRETS_DIR=/path/to/your/secrets
+# API keys (optional — add only what you need)
+# GITHUB_TOKEN=your_github_token_here
 ```
 
-### 2. Configure secrets
+> **Security Warning — Read Before Adding API Keys**
+>
+> Any secret you put in `.env` will be accessible to the AI agents running inside the container. The LLM can read environment variables, files, and shell history. To protect yourself:
+>
+> - **Set expiration dates** on all API keys and tokens
+> - **Rotate keys regularly** (e.g., weekly or after each session)
+> - **Use fine-grained tokens** with the minimum required permissions
+> - **Set spending limits / cost barriers** on API accounts to prevent runaway costs
+> - **Never reuse production keys** — create dedicated keys for the sandbox
+> - **Revoke keys immediately** if you suspect they have been compromised
+>
+> The `.env` file is gitignored to prevent accidental commits, but the AI agent inside the container **will** have access to these values at runtime.
 
-Create a `.env` file inside your secrets directory with your API keys.
-Keep this directory **outside** of any git repository to prevent AI coding assistants from accessing your credentials:
-
-```bash
-mkdir -p $SANDBOX_SECRETS_DIR
-
-cat > $SANDBOX_SECRETS_DIR/.env << EOF
-GITHUB_TOKEN=your_github_token_here
-EOF
-```
-
-### 3. Create workspace and build
+### 2. Create workspace and build
 
 ```bash
 mkdir -p $(grep SANDBOX_WORKSPACE .env | cut -d= -f2)/workspace

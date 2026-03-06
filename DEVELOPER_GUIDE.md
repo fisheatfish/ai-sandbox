@@ -64,7 +64,7 @@ The GitHub MCP is configured by default for the `/workspace` root folder. If you
 
 3. **Replace** `$GITHUB_TOKEN` with your actual GitHub token.
 
-**Tip**: The `GITHUB_TOKEN` is stored in the `.env` file in the `SANDBOX_SECRETS_DIR` folder. This folder must be kept **outside** any repository where an AI coding assistant runs, to prevent accidental exposure of API keys.
+**Tip**: The `GITHUB_TOKEN` is configured in the `.env` file at the root of the project and passed to the container as an environment variable. See the security warning in [README.md](README.md) for best practices on managing API keys.
 
 **Note**: Repeat this step for each new project where you want to use the GitHub MCP.
 
@@ -88,10 +88,7 @@ The GitHub MCP is configured by default for the `/workspace` root folder. If you
 3. **Verification**:
    The configuration will be automatically saved in `ai-cli-data/.claude.json` and persisted between sessions.
 
-**Tip**: The `CONTEXT7_TOKEN` is stored in the `.env` file in the `SANDBOX_SECRETS_DIR` folder. Make sure to load this file before running the commands:
-   ```bash
-   source /path/to/SANDBOX_SECRETS_DIR/.env
-   ```
+**Tip**: The `CONTEXT7_TOKEN` is configured in the `.env` file at the root of the project and passed to the container as an environment variable.
 
 **Security**: Make sure the `CONTEXT7_TOKEN` environment variable is set before running the command.
 
@@ -249,7 +246,7 @@ To let Claude Code create branches, commit, and push on its own, you need to con
 
 Create a [fine-grained token](https://github.com/settings/tokens?type=beta) with **Contents** (read/write) permission on the repos you want Claude to push to.
 
-Add it to your secrets `.env` file on your `SANDBOX_SECRETS_DIR`:
+Add it to your `.env` file at the root of the project:
 
 ```dotenv
 GITHUB_TOKEN=ghp_xxxxxxxxxxxx
