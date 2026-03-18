@@ -1,5 +1,7 @@
 # AI Sandbox
 
+[![CI](https://github.com/fisheatfish/ai-sandbox/actions/workflows/ci.yml/badge.svg)](https://github.com/fisheatfish/ai-sandbox/actions/workflows/ci.yml)
+
 A Docker sandbox for developers who want to explore and experiment with AI coding tools like **Claude Code** in an isolated, reproducible environment.
 
 ## What's Inside
@@ -89,6 +91,8 @@ claude --help
 |----------|----------|
 | [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | MCP configuration, autonomous git push, observability, architecture, troubleshooting |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Git workflow, PR checklist |
+| [SECURITY.md](SECURITY.md) | Security policy, vulnerability reporting |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community guidelines |
 
 ## TODO / Roadmap
 
@@ -98,4 +102,4 @@ claude --help
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [Apache License 2.0](LICENSE).
