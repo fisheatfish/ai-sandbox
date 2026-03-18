@@ -25,8 +25,9 @@ jobs:
         with:
           image-ref: ai-sandbox
           format: table
-          exit-code: '0'
+          exit-code: '1'
           severity: CRITICAL,HIGH
+          trivyignores: .trivyignore
 
       - name: Validate docker-compose config
         run: |

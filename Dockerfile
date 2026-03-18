@@ -3,7 +3,7 @@ FROM node:20-slim
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Minimal dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     git \
     curl \
     ca-certificates \
