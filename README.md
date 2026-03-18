@@ -4,6 +4,8 @@
 
 A Docker sandbox for developers who want to explore and experiment with AI coding tools like **Claude Code** in an isolated, reproducible environment.
 
+![AI Sandbox Demo](docs/demo.gif)
+
 ## What's Inside
 
 - **ai-sandbox**: Node.js 20 container with Claude Code CLI pre-installed
@@ -50,6 +52,11 @@ SANDBOX_WORKSPACE=/path/to/your/sandbox-workspace
 
 ```bash
 mkdir -p $(grep SANDBOX_WORKSPACE .env | cut -d= -f2)/workspace
+
+# Option A: Pull from GHCR
+docker pull ghcr.io/fisheatfish/ai-sandbox:latest
+
+# Option B: Build locally
 docker build -t ai-sandbox .
 ```
 
@@ -158,7 +165,6 @@ environment:
 
 ## TODO / Roadmap
 
-- [ ] Package and publish the Docker image to a container registry (GHCR / Docker Hub)
 - [ ] Add a startup script to automate git config inside the container
 - [ ] Support additional AI coding tools (Codex, Gemini CLI, etc.)
 
