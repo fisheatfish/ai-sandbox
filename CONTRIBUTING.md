@@ -16,11 +16,11 @@ Thank you for wanting to contribute to this project!
 ### 1. Create a feature branch
 
 ```bash
-git checkout -b feature/my-feature
+git checkout -b feat/my-feature
 ```
 
 Branch naming:
-- `feature/add-mcp-servers` - new features
+- `feat/add-mcp-servers` - new features
 - `fix/prometheus-scrape` - bug fixes
 - `docs/update-readme` - documentation
 - `chore/update-dependencies` - maintenance

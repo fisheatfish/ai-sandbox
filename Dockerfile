@@ -3,7 +3,7 @@ FROM node:20-slim
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Minimal dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     git \
     curl \
     ca-certificates \
@@ -18,8 +18,8 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | \
 
 # Cleaning the cache, update npm, install MCP CLI tools and AI CLIs
 RUN npm cache clean --force \
- && npm install -g npm@11.7.0 \
- && npm install -g backlog.md@latest \
+ && npm install -g npm@11.11.1 \
+ && npm install -g backlog.md@1.42.0 \
  && curl -fsSL https://claude.ai/install.sh | bash
 
 # Non-root user (security)

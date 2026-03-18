@@ -20,6 +20,15 @@ jobs:
       - name: Build Docker image
         run: docker build -t ai-sandbox .
 
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: ai-sandbox
+          format: table
+          exit-code: '1'
+          severity: CRITICAL,HIGH
+          trivyignores: .trivyignore
+
       - name: Validate docker-compose config
         run: |
           touch .env

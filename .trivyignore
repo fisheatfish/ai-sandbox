@@ -1,0 +1,29 @@
+# Trivy ignore file - CVEs without available fixes
+# Review and update regularly as fixes become available
+
+# Git vulnerabilities - no fix available in Debian 12
+CVE-2025-48384
+CVE-2025-48385
+
+# Glibc integer overflow - no fix available yet
+CVE-2026-0861
+
+# Libexpat vulnerability - no fix available yet
+CVE-2026-25210
+
+# OpenLDAP null pointer dereference - no fix available
+CVE-2023-2953
+
+# Python 3.11 vulnerabilities - no fix available in Debian 12
+CVE-2025-13836
+CVE-2025-15366
+CVE-2025-15367
+CVE-2025-69534
+CVE-2025-8194
+CVE-2026-1299
+
+# SQLite integer overflow - no fix available yet
+CVE-2025-7458
+
+# Zlib vulnerability - marked as will_not_fix by maintainers
+CVE-2023-45853
