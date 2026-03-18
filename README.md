@@ -53,7 +53,7 @@ mkdir -p $(grep SANDBOX_WORKSPACE .env | cut -d= -f2)/workspace
 docker build -t ai-sandbox .
 ```
 
-### 4. Start services
+### 3. Start services
 
 ```bash
 docker-compose up -d
@@ -70,35 +70,101 @@ docker exec -it ai-sandbox bash
 
 ## Quick Access Alias
 
-Add this alias to your `~/.bashrc` or `~/.zshrc` to quickly start the sandbox and navigate to a project:
-
 ```bash
 alias ai-sandbox="cd /path/to/ai-sandbox/ && docker-compose up -d --build && docker exec -it ai-sandbox bash"
 ```
 
-> Replace `/path/to/ai-sandbox/` with the actual path to your local clone.
+## Architecture
 
-## Using the CLI
+```mermaid
+graph TB
+    subgraph ai_sandbox["ai-sandbox Container"]
+        direction LR
+        cli["CLI Tools"]
+        claude["@anthropic-ai/claude-code"]
+        utils["Git, Python 3, npm, curl"]
 
-```bash
-# From inside the ai-sandbox container
-claude --help
+        cli --> claude
+        cli --> utils
+    end
+
+    subgraph workspace["Workspace Volume"]
+        ws["/workspace - Your projects"]
+    end
+
+    subgraph observability["Observability Stack"]
+        otlp["OTel Collector<br/>Port: 4317"]
+        prom["Prometheus<br/>Port: 9090"]
+        grafana["Grafana<br/>Port: 3000"]
+
+        otlp -->|Metrics| prom
+        prom -->|Visualize| grafana
+    end
+
+    subgraph llm["Local LLM"]
+        ollama["Ollama<br/>Port: 11434"]
+    end
+
+    ai_sandbox -->|OTLP gRPC| otlp
+    ai_sandbox -->|Mount| ws
+    ai_sandbox -->|Requests| ollama
+
+    style ai_sandbox fill:#e3f2fd,stroke:#1976d2,stroke-width:3px,color:#000
+    style workspace fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    style observability fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style llm fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
 ```
 
-## Documentation
+## Autonomous Git Push
 
-| Document | Contents |
-|----------|----------|
-| [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | MCP configuration, autonomous git push, observability, architecture, troubleshooting |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Git workflow, PR checklist |
-| [SECURITY.md](SECURITY.md) | Security policy, vulnerability reporting |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community guidelines |
+To let Claude create branches, commit, and push:
+
+1. Create a [fine-grained token](https://github.com/settings/tokens?type=beta) with **Contents** (read/write) permission
+2. Add `GITHUB_TOKEN=ghp_xxxx` to your `.env`
+3. Inside the container, configure git:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+```
+
+> **Security note:** The `insteadOf` rule stores the token in `~/.gitconfig` in plain text. Use minimum scopes and rotate regularly.
+
+## Using Ollama for Local Models
+
+```bash
+# From inside the container
+curl http://ollama:11434/api/tags    # List models
+ollama run mistral                    # Run a model
+```
+
+## Observability
+
+| Component | Port | Config |
+|-----------|------|--------|
+| OTel Collector | 4317 (gRPC) | [otel-collector-config.yaml](observability/otel-collector-config.yaml) |
+| Prometheus | 9090 | [prometheus.yml](observability/prometheus.yml) |
+| Grafana | 3000 | Volume: `grafana-data` |
+
+Enable telemetry in `docker-compose.yml`:
+
+```yaml
+environment:
+  - CLAUDE_CODE_ENABLE_TELEMETRY=1
+  - OTEL_METRICS_EXPORTER=otlp
+  - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+```
 
 ## TODO / Roadmap
 
 - [ ] Package and publish the Docker image to a container registry (GHCR / Docker Hub)
 - [ ] Add a startup script to automate git config inside the container
 - [ ] Support additional AI coding tools (Codex, Gemini CLI, etc.)
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for git workflow and PR guidelines.
 
 ## License
 
