@@ -8,7 +8,7 @@ A Docker sandbox for developers who want to explore and experiment with AI codin
 
 ## What's Inside
 
-- **ai-sandbox**: Node.js 20 container with Claude Code CLI pre-installed
+- **ai-sandbox**: Node.js 20 container with Claude Code CLI and [RTK](https://github.com/rtk-ai/rtk) pre-installed
 - **Ollama**: Local LLM support for open-source models
 - **Observability stack**: OpenTelemetry Collector, Prometheus, and Grafana
 
@@ -79,9 +79,11 @@ graph TB
         direction LR
         cli["CLI Tools"]
         claude["@anthropic-ai/claude-code"]
+        rtk["RTK (token optimizer)"]
         utils["Git, Python 3, npm, curl"]
 
         cli --> claude
+        cli --> rtk
         cli --> utils
     end
 
@@ -127,6 +129,21 @@ git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https:/
 ```
 
 > **Security note:** The `insteadOf` rule stores the token in `~/.gitconfig` in plain text. Use minimum scopes and rotate regularly.
+
+## RTK — Token Optimizer
+
+[RTK](https://github.com/rtk-ai/rtk) is pre-installed in the sandbox. It reduces LLM token consumption by 60-90% by filtering and compressing command outputs (git, docker, tests, etc.).
+
+```bash
+# Use it as a prefix for any command
+rtk git status
+rtk docker ps
+
+# Or enable the hook to automatically rewrite commands
+rtk init -g 
+```
+
+Once the hook is installed, commands like `git status` are automatically rewritten to `rtk git status` — Claude never sees the transformation.
 
 ## Using Ollama for Local Models
 
