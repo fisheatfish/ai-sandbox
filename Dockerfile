@@ -16,19 +16,20 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | \
     UV_INSTALL_DIR=/usr/local/bin INSTALLER_NO_MODIFY_PATH=1 sh \
  && chmod +x /usr/local/bin/uv /usr/local/bin/uvx
 
-# Cleaning the cache, update npm, install MCP CLI tools and AI CLIs
+# Cleaning the cache, update npm, install MCP CLI tools
 RUN npm cache clean --force \
  && npm install -g npm@11.11.1 \
- && npm install -g backlog.md@1.42.0 \
- && curl -fsSL https://claude.ai/install.sh | bash
+ && npm install -g backlog.md@1.42.0
 
 # Non-root user (security)
 RUN useradd -m aiuser
 USER aiuser
-ENV PATH="/home/aiuser/.local/bin:${PATH}"
 
 WORKDIR /workspace
 
 # Environment
 ENV HOME=/home/aiuser
 ENV PATH="/home/aiuser/.local/bin:/usr/local/bin:${PATH}"
+
+# Install AI tools
+RUN curl -fsSL https://claude.ai/install.sh | bash
