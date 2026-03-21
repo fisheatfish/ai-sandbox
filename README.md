@@ -48,21 +48,20 @@ SANDBOX_WORKSPACE=/path/to/your/sandbox-workspace
 >
 > The `.env` file is gitignored to prevent accidental commits, but the AI agent inside the container **will** have access to these values at runtime.
 
-### 2. Create workspace and build
+### 2. Get the image
+
+#### Option A: Pull from GHCR (recommended)
+
+```bash
+docker pull ghcr.io/fisheatfish/ai-sandbox:latest
+docker run -it --env-file .env ghcr.io/fisheatfish/ai-sandbox:latest bash
+```
+
+#### Option B: Build locally and run with Docker Compose
 
 ```bash
 mkdir -p $(grep SANDBOX_WORKSPACE .env | cut -d= -f2)/workspace
-
-# Option A: Pull from GHCR
-docker pull ghcr.io/fisheatfish/ai-sandbox:latest
-
-# Option B: Build locally
 docker build -t ai-sandbox .
-```
-
-### 3. Start services
-
-```bash
 docker-compose up -d
 docker exec -it ai-sandbox bash
 ```
