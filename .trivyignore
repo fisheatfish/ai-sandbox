@@ -27,3 +27,6 @@ CVE-2025-7458
 
 # Zlib vulnerability - marked as will_not_fix by maintainers
 CVE-2023-45853
+
+# Python3-setuptools-whl path traversal via malicious tar archives - no fix available yet
+CVE-2026-23949
