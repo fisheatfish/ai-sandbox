@@ -1,4 +1,4 @@
-FROM node:20-slim
+FROM node:20-trixie-slim
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -33,3 +33,4 @@ ENV PATH="/home/aiuser/.local/bin:/usr/local/bin:${PATH}"
 
 # Install AI tools
 RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
