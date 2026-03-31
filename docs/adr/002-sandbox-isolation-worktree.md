@@ -1,7 +1,7 @@
 # ADR 002: Sandbox isolation — workspace strategy
 
 **Date:** 2026-03-25
-**Status:** Proposed
+**Status:** Accepted
 **Deciders:** Gireg Roussel
 
 ---
@@ -72,7 +72,7 @@ Regardless of workspace choice, shared services are managed via a separate `dock
 
 ## Decision
 
-> To be completed by the team after discussion.
+> Option A: Git worktree per sandbox
 
 ---
 

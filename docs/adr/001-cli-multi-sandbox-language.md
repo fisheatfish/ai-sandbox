@@ -1,7 +1,7 @@
 # ADR 001: Multi-sandbox CLI — language and framework choice
 
 **Date:** 2026-03-25
-**Status:** Proposed
+**Status:** Accepted
 **Deciders:** Gireg Roussel
 
 ---
@@ -56,7 +56,7 @@ Bash script using `docker` and `git` commands directly with functions for each s
 
 ## Decision
 
-> To be completed by the team after discussion.
+> Option A: Python (Typer + Rich + Docker SDK)
 
 ---
 
