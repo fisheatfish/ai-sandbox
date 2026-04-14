@@ -19,7 +19,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | \
 # Cleaning the cache, update npm, install MCP CLI tools
 RUN npm cache clean --force \
  && npm install -g npm@11.11.1 \
- && npm install -g backlog.md@1.42.0
+ && npm install -g backlog.md@1.44.0
 
 # Non-root user (security)
 RUN useradd -m aiuser
