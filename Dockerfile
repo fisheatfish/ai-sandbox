@@ -33,4 +33,5 @@ ENV PATH="/home/aiuser/.local/bin:/usr/local/bin:${PATH}"
 
 # Install AI tools
 RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN curl -LsSf https://mistral.ai/vibe/install.sh | bash
 RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
